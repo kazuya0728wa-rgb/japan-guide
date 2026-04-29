@@ -1560,18 +1560,6 @@ if (langSel) {
   });
 }
 
-  // Google翻訳コンボを取得して言語適用（最大3秒待機）
-  const tryApply = (retries) => {
-    const combo = document.querySelector('.goog-te-combo');
-    if (combo) {
-      combo.value = lang;
-      combo.dispatchEvent(new Event('change'));
-    } else if (retries > 0) {
-      setTimeout(() => tryApply(retries - 1), 300);
-    }
-  };
-  tryApply(10);
-}
 
 document.addEventListener('DOMContentLoaded', () => {
   // コンテンツ要素に data-ckey を自動付与
