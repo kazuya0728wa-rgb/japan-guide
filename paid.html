@@ -201,6 +201,12 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 
 @media(min-width:520px){.container{padding:0 24px 64px}}
 @media print{.top-nav,.type-bar,.variant-info{display:none}.city-sec{display:block!important}.stop{break-inside:avoid}}
+
+/* Google Translate UI suppression */
+.goog-te-banner-frame,.goog-te-balloon-frame{display:none!important}
+.goog-tooltip,.goog-tooltip:hover{display:none!important}
+.goog-text-highlight{background:transparent!important;box-shadow:none!important}
+body{top:0!important}
 </style>
 </head>
 <body>
@@ -1260,6 +1266,8 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 
 </div><!-- /container -->
 
+<div id="google_translate_element" style="display:none"></div>
+
 <footer class="site-footer">
   <div>📸 Photo credits: <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a> — free to use under Unsplash License</div>
   <div>Content is for guidance only — always verify hours, prices, and bookings before visiting.</div>
@@ -1543,7 +1551,29 @@ if (langSel) {
   langSel.addEventListener('change', () => {
     currentLang = langSel.value;
     setLang(currentLang);
+    applyGoogleTranslate(currentLang);
   });
+}
+
+function applyGoogleTranslate(lang) {
+  if (lang === 'en') {
+    // EN: cookie削除してリロード（翻訳リセット）
+    document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:01 UTC; path=/';
+    document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:01 UTC; path=/; domain=.' + location.hostname;
+    window.location.reload();
+    return;
+  }
+  // Google翻訳コンボを取得して言語適用（最大3秒待機）
+  const tryApply = (retries) => {
+    const combo = document.querySelector('.goog-te-combo');
+    if (combo) {
+      combo.value = lang;
+      combo.dispatchEvent(new Event('change'));
+    } else if (retries > 0) {
+      setTimeout(() => tryApply(retries - 1), 300);
+    }
+  };
+  tryApply(10);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -1551,7 +1581,16 @@ document.addEventListener('DOMContentLoaded', () => {
   if (langSel) langSel.value = currentLang;
   applyFilter(activeVariant);
   initAnim();
+  // ページロード時にGoogle翻訳の言語を適用（EN以外が保存されている場合）
+  if (currentLang !== 'en') applyGoogleTranslate(currentLang);
 });
 </script>
+
+<script>
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false }, 'google_translate_element');
+}
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
