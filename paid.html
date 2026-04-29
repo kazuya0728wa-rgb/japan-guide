@@ -1322,21 +1322,6 @@ document.querySelectorAll('.lang').forEach(btn => {
   btn.addEventListener('click', () => {
     currentLang = btn.dataset.lang;
     document.querySelectorAll('.lang').forEach(b => b.classList.toggle('active', b === btn));
-    // backup_lbl / stag_book
-  document.querySelectorAll('details.backup > summary').forEach(el => {
-    clsCounts['backup_lbl'] = (clsCounts['backup_lbl'] || 0) + 1;
-    el.dataset.ckey = 'backup_lbl_' + String(clsCounts['backup_lbl']).padStart(3,'0');
-  });
-  document.querySelectorAll('span.stag.book').forEach(el => {
-    clsCounts['stag_book'] = (clsCounts['stag_book'] || 0) + 1;
-    el.dataset.ckey = 'stag_book_' + String(clsCounts['stag_book']).padStart(3,'0');
-  });
-  // 固定フレーズ → data-i18n
-  document.querySelectorAll('span.stag.free').forEach(el => el.dataset.i18n = 'stag_free');
-  document.querySelectorAll('span.stag.photo').forEach(el => el.dataset.i18n = 'stag_photo');
-  document.querySelectorAll('span.stag.crowd-med').forEach(el => el.dataset.i18n = 'stag_crowd_med');
-  document.querySelectorAll('span.stag.crowd-hi').forEach(el => el.dataset.i18n = 'stag_crowd_hi');
-  document.querySelectorAll('.budget-total .lbl').forEach(el => el.dataset.i18n = 'day_total');
     setLang(currentLang);
   });
 });
@@ -1595,6 +1580,21 @@ document.addEventListener('DOMContentLoaded', () => {
       el.dataset.ckey = cls + '_' + String(clsCounts[cls]).padStart(3,'0');
     });
   });
+  // backup_lbl / stag_book の data-ckey 付与
+  document.querySelectorAll('details.backup > summary').forEach(el => {
+    clsCounts['backup_lbl'] = (clsCounts['backup_lbl'] || 0) + 1;
+    el.dataset.ckey = 'backup_lbl_' + String(clsCounts['backup_lbl']).padStart(3,'0');
+  });
+  document.querySelectorAll('span.stag.book').forEach(el => {
+    clsCounts['stag_book'] = (clsCounts['stag_book'] || 0) + 1;
+    el.dataset.ckey = 'stag_book_' + String(clsCounts['stag_book']).padStart(3,'0');
+  });
+  // 固定フレーズ → data-i18n
+  document.querySelectorAll('span.stag.free').forEach(el => el.dataset.i18n = 'stag_free');
+  document.querySelectorAll('span.stag.photo').forEach(el => el.dataset.i18n = 'stag_photo');
+  document.querySelectorAll('span.stag.crowd-med').forEach(el => el.dataset.i18n = 'stag_crowd_med');
+  document.querySelectorAll('span.stag.crowd-hi').forEach(el => el.dataset.i18n = 'stag_crowd_hi');
+  document.querySelectorAll('.budget-total .lbl').forEach(el => el.dataset.i18n = 'day_total');
   setLang(currentLang);
   if (langSel) langSel.value = currentLang;
   applyFilter(activeVariant);
