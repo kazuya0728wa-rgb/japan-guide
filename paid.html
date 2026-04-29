@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Premium 1-day flexible travel plan for Tokyo, Kyoto, and Osaka — with exact timing, backup routes, transport details, and budget breakdown.">
+  <title>Japan Travel Plan — Premium Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --tok: #2563EB; --tok-d: #1D4ED8; --tok-l: #EFF6FF; --tok-ll: #DBEAFE;
+      --kyo: #16A34A; --kyo-d: #15803D; --kyo-l: #F0FDF4; --kyo-ll: #DCFCE7;
+      --osa: #EA580C; --osa-d: #C2410C; --osa-l: #FFF7ED; --osa-ll: #FED7AA;
+      --morn: #D97706; --morn-l: #FFFBEB; --morn-ll: #FEF3C7;
+      --aftn: #2563EB; --aftn-l: #EFF6FF; --aftn-ll: #DBEAFE;
+      --even: #7C3AED; --even-l: #F5F3FF; --even-ll: #EDE9FE;
+      --bg: #F8FAFC; --card: #fff; --text: #0F172A; --muted: #64748B;
+      --border: #E2E8F0; --r: 14px; --sh: 0 1px 3px rgba(0,0,0,.06),0 4px 12px rgba(0,0,0,.05);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    /* ── TOP NAV ── */
+    .top-nav {
+      position: sticky; top: 0; z-index: 200;
+      background: #0F172A; padding: 10px 16px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.3);
+    }
+    .plan-title { font-size: 13px; font-weight: 700; color: #fff; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+    .paid-badge { background: #D97706; color: #fff; font-size: 10px; font-weight: 800; letter-spacing: .06em; padding: 2px 7px; border-radius: 999px; }
+    .city-tabs { display: flex; gap: 4px; }
+    .ctab { background: rgba(255,255,255,.1); border: none; color: rgba(255,255,255,.7); padding: 7px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .15s; font-family: inherit; white-space: nowrap; }
+    .ctab:hover { background: rgba(255,255,255,.18); color: #fff; }
+    .ctab.active { color: #fff; }
+    .ctab[data-city="tokyo"].active { background: var(--tok); }
+    .ctab[data-city="kyoto"].active { background: var(--kyo); }
+    .ctab[data-city="osaka"].active { background: var(--osa); }
+
+    /* ── TYPE FILTER ── */
+    .type-bar { background: #1E293B; padding: 8px 16px; overflow-x: auto; display: flex; gap: 6px; scrollbar-width: none; -ms-overflow-style: none; }
+    .type-bar::-webkit-scrollbar { display: none; }
+    .ttype { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); color: rgba(255,255,255,.65); padding: 5px 13px; border-radius: 999px; font-size: 12px; font-weight: 500; cursor: pointer; white-space: nowrap; transition: all .15s; font-family: inherit; }
+    .ttype.active { background: rgba(255,255,255,.2); border-color: rgba(255,255,255,.35); color: #fff; }
+
+    /* ── CONTAINER ── */
+    .container { max-width: 480px; margin: 0 auto; padding: 0 16px 56px; }
+
+    /* ── CITY SECTION ── */
+    .city-sec { display: none; }
+    .city-sec.active { display: block; }
+
+    /* ── CITY HERO ── */
+    .city-hero { border-radius: 20px; padding: 28px 22px; margin: 18px 0 16px; position: relative; overflow: hidden; }
+    .city-hero.tok { background: linear-gradient(135deg,#1E3A8A,#2563EB 55%,#60A5FA); }
+    .city-hero.kyo { background: linear-gradient(135deg,#14532D,#16A34A 55%,#4ADE80); }
+    .city-hero.osa { background: linear-gradient(135deg,#7C2D12,#EA580C 55%,#FB923C); }
+    .city-hero::before { content:''; position:absolute; top:-40px; right:-40px; width:180px; height:180px; border-radius:50%; background:rgba(255,255,255,.06); }
+    .city-hero h1 { font-size: 30px; font-weight: 900; color: #fff; letter-spacing: -.02em; margin-bottom: 4px; position: relative; z-index: 1; }
+    .city-hero .tagline { font-size: 13px; color: rgba(255,255,255,.8); position: relative; z-index: 1; margin-bottom: 10px; }
+    .best-for { display: inline-block; background: rgba(255,255,255,.18); backdrop-filter: blur(4px); border-radius: 10px; padding: 8px 14px; font-size: 13px; color: rgba(255,255,255,.95); position: relative; z-index: 1; }
+    .best-for strong { color: #fff; }
+
+    /* ── PERIOD HEADER ── */
+    .period-hdr { display: flex; align-items: center; gap: 8px; margin: 20px 0 12px; }
+    .period-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .period-hdr.morn .period-dot { background: var(--morn); }
+    .period-hdr.aftn .period-dot { background: var(--aftn); }
+    .period-hdr.even .period-dot { background: var(--even); }
+    .period-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .period-hdr.morn .period-label { color: var(--morn); }
+    .period-hdr.aftn .period-label { color: var(--aftn); }
+    .period-hdr.even .period-label { color: var(--even); }
+    .period-line { flex: 1; height: 1px; background: var(--border); }
+
+    /* ── STOP CARD ── */
+    .stop { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 16px 18px; margin-bottom: 6px; box-shadow: var(--sh); position: relative; }
+    .stop.morn { border-left: 3px solid var(--morn); }
+    .stop.aftn { border-left: 3px solid var(--aftn); }
+    .stop.even { border-left: 3px solid var(--even); }
+
+    .stop-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+    .stop-time { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+    .morn .stop-time { background: var(--morn-ll); color: #92400E; }
+    .aftn .stop-time { background: var(--aftn-ll); color: #1D4ED8; }
+    .even .stop-time { background: var(--even-ll); color: #5B21B6; }
+
+    .stop-name { font-size: 15px; font-weight: 700; line-height: 1.3; margin-bottom: 4px; }
+    .stop-name a { color: inherit; text-decoration: none; }
+    .stop-name a:hover { text-decoration: underline; }
+
+    .stop-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
+    .stag { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; }
+    .stag.dur  { background: #F1F5F9; color: var(--muted); }
+    .stag.cost { background: #ECFDF5; color: #065F46; }
+    .stag.crowd-hi { background: #FEF2F2; color: #991B1B; }
+    .stag.crowd-med { background: #FFFBEB; color: #92400E; }
+    .stag.book { background: #FEE2E2; color: #B91C1C; }
+    .stag.free { background: #F0FDF4; color: #166534; }
+
+    .stop-what { font-size: 13px; color: #374151; line-height: 1.65; margin-bottom: 10px; }
+
+    .pro-tip { background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 10px; padding: 9px 12px; font-size: 12px; color: #78350F; line-height: 1.6; margin-bottom: 10px; }
+    .pro-tip strong { color: #92400E; }
+
+    /* ── BACKUP ACCORDION ── */
+    .backup { border-top: 1px solid var(--border); padding-top: 10px; margin-top: 2px; }
+    .backup summary { font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; list-style: none; display: flex; align-items: center; gap: 6px; user-select: none; }
+    .backup summary::-webkit-details-marker { display: none; }
+    .backup summary::before { content: '▶'; font-size: 9px; transition: transform .2s; }
+    .backup[open] summary::before { transform: rotate(90deg); }
+    .backup-body { margin-top: 8px; font-size: 12px; color: #374151; line-height: 1.7; background: #F8FAFC; border-radius: 8px; padding: 10px 12px; }
+    .backup-body b { color: var(--text); }
+
+    /* ── MOVE CONNECTOR ── */
+    .move-conn { display: flex; align-items: flex-start; gap: 8px; padding: 8px 0 8px 8px; }
+    .move-vline { width: 2px; background: var(--border); min-height: 24px; margin-top: 4px; flex-shrink: 0; border-radius: 1px; }
+    .move-info { font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .move-info strong { color: var(--text); }
+
+    /* ── SECTION HEADERS (food/alt) ── */
+    .sec-hdr { font-size: 16px; font-weight: 800; margin: 28px 0 12px; display: flex; align-items: center; gap: 8px; }
+    .sec-hdr::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* ── FOOD CARD ── */
+    .food-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 16px; margin-bottom: 10px; box-shadow: var(--sh); }
+    .food-cat { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 10px; }
+    .food-row { display: flex; gap: 6px; align-items: baseline; margin-bottom: 5px; font-size: 13px; }
+    .food-lbl { font-weight: 600; min-width: 72px; color: var(--muted); font-size: 12px; }
+    .food-val { color: var(--text); }
+    .food-val a { color: var(--tok); text-decoration: none; font-weight: 500; }
+    .food-val a:hover { text-decoration: underline; }
+    .food-why { margin-top: 8px; font-size: 12px; color: var(--muted); font-style: italic; line-height: 1.55; border-top: 1px solid var(--border); padding-top: 8px; }
+
+    /* ── ALTERNATIVE CARDS ── */
+    .alt-card { border: 1px solid var(--border); border-radius: var(--r); margin-bottom: 8px; overflow: hidden; }
+    .alt-card summary { padding: 12px 16px; font-size: 13px; font-weight: 600; cursor: pointer; list-style: none; display: flex; align-items: center; gap: 8px; background: var(--card); }
+    .alt-card summary::-webkit-details-marker { display: none; }
+    .alt-card summary::after { content: '▾'; margin-left: auto; color: var(--muted); transition: transform .2s; }
+    .alt-card[open] summary::after { transform: rotate(180deg); }
+    .alt-scenario { font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; padding: 2px 8px; border-radius: 6px; }
+    .sc-rainy  { background: #DBEAFE; color: #1E40AF; }
+    .sc-crowd  { background: #FEF9C3; color: #854D0E; }
+    .sc-tired  { background: #F1F5F9; color: #475569; }
+    .sc-food   { background: #ECFDF5; color: #065F46; }
+    .sc-budget { background: #F0FDF4; color: #166534; }
+    .sc-nature { background: #F0FDF4; color: #15803D; }
+    .sc-family { background: #FEF3C7; color: #92400E; }
+    .alt-body { padding: 12px 16px; font-size: 13px; line-height: 1.7; background: #F8FAFC; border-top: 1px solid var(--border); color: #374151; }
+    .alt-body b { color: var(--text); }
+    .alt-body a { color: var(--tok); text-decoration: none; }
+    .alt-body a:hover { text-decoration: underline; }
+
+    /* Traveler type visibility */
+    .alt-card[data-types] { opacity: 1; transition: opacity .2s; }
+    body.filter-food   .alt-card:not([data-types~="food"])   { opacity: .35; }
+    body.filter-budget .alt-card:not([data-types~="budget"]) { opacity: .35; }
+    body.filter-rainy  .alt-card:not([data-types~="rainy"])  { opacity: .35; }
+    body.filter-family .alt-card:not([data-types~="family"]) { opacity: .35; }
+    body.filter-food   .alt-card[data-types~="food"]   { border-color: var(--kyo); }
+    body.filter-budget .alt-card[data-types~="budget"] { border-color: var(--morn); }
+    body.filter-rainy  .alt-card[data-types~="rainy"]  { border-color: var(--aftn); }
+    body.filter-family .alt-card[data-types~="family"] { border-color: var(--osa); }
+
+    /* ── DAY BUDGET ── */
+    .budget-box { background: #0F172A; border-radius: var(--r); padding: 18px 20px; margin: 24px 0 16px; color: #fff; }
+    .budget-box h3 { font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: rgba(255,255,255,.6); margin-bottom: 12px; }
+    .budget-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,.08); font-size: 13px; }
+    .budget-row:last-of-type { border-bottom: none; }
+    .budget-row .cat { color: rgba(255,255,255,.75); }
+    .budget-row .amt { font-weight: 700; color: #fff; }
+    .budget-total { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.2); }
+    .budget-total .lbl { font-size: 13px; color: rgba(255,255,255,.8); font-weight: 600; }
+    .budget-total .val { font-size: 18px; font-weight: 900; color: #FCD34D; }
+    .budget-note { font-size: 11px; color: rgba(255,255,255,.4); margin-top: 8px; }
+
+    /* ── IMPORTANT NOTE ── */
+    .imp-note { background: #FFF1F2; border: 1.5px solid #FECDD3; border-radius: var(--r); padding: 14px 16px; font-size: 13px; color: #881337; line-height: 1.7; margin: 16px 0 24px; }
+    .imp-note strong { color: #9F1239; }
+
+    /* ── QUICK LINKS ── */
+    .ql-city { font-size: 16px; font-weight: 800; margin: 28px 0 10px; }
+    .ql-city.tok { color: var(--tok); }
+    .ql-city.kyo { color: var(--kyo); }
+    .ql-city.osa { color: var(--osa); }
+    .ql-grid { display: flex; flex-direction: column; gap: 5px; margin-bottom: 20px; }
+    .ql-a { display: flex; align-items: center; justify-content: space-between; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; text-decoration: none; color: var(--text); font-size: 13px; font-weight: 500; transition: all .12s; }
+    .ql-a:hover { box-shadow: var(--sh); transform: translateX(2px); }
+    .ql-a span { color: var(--muted); font-size: 12px; }
+
+    /* ── FADE IN ── */
+    .fi { opacity: 0; transform: translateY(14px); transition: opacity .4s, transform .4s; }
+    .fi.on { opacity: 1; transform: none; }
+
+    @media (min-width: 520px) { .container { padding: 0 24px 56px; } }
+
+    /* ── PRINT ── */
+    @media print {
+      .top-nav, .type-bar { display: none; }
+      .city-sec { display: block !important; }
+      .stop { break-inside: avoid; }
+      .backup[open] .backup-body { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top Navigation -->
+<nav class="top-nav">
+  <div class="plan-title">🗾 Japan Travel Plan <span class="paid-badge">PREMIUM</span></div>
+  <div class="city-tabs">
+    <button class="ctab active" data-city="tokyo">🗼 Tokyo</button>
+    <button class="ctab" data-city="kyoto">⛩️ Kyoto</button>
+    <button class="ctab" data-city="osaka">🏯 Osaka</button>
+  </div>
+</nav>
+
+<!-- Traveler Type Filter -->
+<div class="type-bar">
+  <button class="ttype active" data-type="all">🎌 All</button>
+  <button class="ttype" data-type="food">🍜 Food First</button>
+  <button class="ttype" data-type="budget">💰 Budget</button>
+  <button class="ttype" data-type="rainy">🌧️ Rainy Day</button>
+  <button class="ttype" data-type="family">👨‍👩‍👧 Family</button>
+</div>
+
+<div class="container">
+
+<!-- ════════════════════ TOKYO ════════════════════ -->
+<section id="tokyo" class="city-sec active">
+  <div class="city-hero tok fi">
+    <h1>TOKYO</h1>
+    <div class="tagline">Flexible 1-day food &amp; sightseeing plan</div>
+    <div class="best-for"><strong>Best for:</strong> First-time visitors, couples, friends, food + iconic photo spots.</div>
+  </div>
+
+  <!-- MORNING -->
+  <div class="period-hdr morn fi"><div class="period-dot"></div><div class="period-label">☀️ Morning</div><div class="period-line"></div></div>
+
+  <div class="stop morn fi">
+    <div class="stop-meta">
+      <span class="stop-time">09:00</span>
+      <span class="stag crowd-med">⚠️ Popular</span>
+    </div>
+    <div class="stop-name"><a href="https://maps.google.com/?q=Tsukiji+Outer+Market+Tokyo" target="_blank" rel="noopener">Tsukiji Outer Market</a></div>
+    <div class="stop-tags">
+      <span class="stag dur">⏱ ~90 min</span>
+      <span class="stag cost">💴 ¥800–1,500</span>
+      <span class="stag free">Free entry</span>
+    </div>
+    <p class="stop-what">Seafood breakfast, market walk, casual food stalls. Good start — many shops open early and items sell out by mid-morning.</p>
+    <div class="pro-tip">💡 <strong>Pro Tip:</strong> Most stalls open by 6–7am. Popular items like fresh sushi and tamagoyaki sell out before 10:30am. Go straight to Marutake for tamagoyaki. The "inner market" moved to Toyosu — the outer market here is the food stall area.</div>
+    <details class="backup">
+      <summary>⚡ Backup if crowded / rainy</summary>
+      <div class="backup-body"><b>Heavy rain:</b> Go directly to Ginza underground cafes or Tokyo Station basement (Gransta / Ramen Street / Ichibangai).<br><b>Very crowded:</b> Arrive at 08:00 instead — the market is best before tour groups arrive after 10am.</div>
+    </details>
+  </div>
+
+  <div class="move-conn"><div class="move-vline"></div><div class="move-info">🚶 Walk 3–8 min within Tsukiji area · same neighborhood</div></div>
+
+  <div class="stop morn fi">
+    <div class="stop-meta"><span class="stop-time">09:25</span></div>
+    <div class="stop-name">
+      <a href="https://maps.google.com/?q=Tsukiji+Yamacho+Tokyo" target="_blank" rel="noopener">Tsukiji Yamacho</a> / <a href="https://maps.google.com/?q=Sushizanmai+Tsukiji+Tokyo" target="_blank" rel="noopener">Sushizanmai</a>
+    </div>
+    <div class="stop-tags">
+      <span class="stag dur">⏱ ~40 min</span>
+      <span class="stag cost">💴 ¥600–1,500</span>
+    </div>
+    <p class="stop-what">Tamagoyaki snack at Yamacho OR sit-down sushi brunch at Sushizanmai. Keep it light — lunch and snacks come later in the day.</p>
+    <div class="pro-tip">💡 <strong>Pro Tip:</strong> Tsukiji Yamacho is the most-photographed tamagoyaki shop — buy one to eat on the go (¥150–200). Sushizanmai is open 24h with English menus, great for first-timers who want to sit.</div>
+    <details class="backup">
+      <summary>⚡ Backup if crowded / rainy</summary>
+      <div class="backup-body"><b>Long line:</b> Skip individual shops and treat the whole Tsukiji area as a food-walk. Many small vendors along the main street are equally good.<br><b>Rain:</b> Sushizanmai has a full indoor restaurant — ideal rain shelter.</div>
+    </details>
+  </div>
+
+  <div class="move-conn"><div class="move-vline"></div><div class="move-info">🚇 <strong>Tsukiji → Asakusa:</strong> Toei Oedo Line or Toei Asakusa Line · ~30–35 min · ¥180–210<br>🚕 Taxi option: ~¥1,500–2,000 (25 min, comfortable with luggage)</div></div>
+
+  <div class="stop morn fi">
+    <div class="stop-meta">
+      <span class="stop-time">11:00</span>
+      <span class="stag crowd-hi">🔴 Very popular</span>
+    </div>
+    <div class="stop-name"><a href="https://maps.google.com/?q=Sensoji+Temple+Asakusa+Tokyo" target="_blank" rel="noopener">Sensoji Temple</a> + <a href="https://maps.google.com/?q=Nakamise+Street+Asakusa+Tokyo" target="_blank" rel="noopener">Nakamise Street</a></div>
+    <div class="stop-tags">
+      <span class="stag dur">⏱ ~2 h</span>
+      <span class="stag cost">💴 ¥0–1,000</span>
+      <span class="stag free">Temple: Free</span>
+    </div>
+    <p class="stop-what">Classic temple, old Tokyo atmosphere, snacks and souvenirs on Nakamise. The Kaminarimon (Thunder Gate) is the iconic photo spot at the entrance.</p>
+    <div class="pro-tip">💡 <strong>Pro Tip:</strong> The temple itself is open 24/7, but the inner chamber closes around 17:00–18:00. For photos without crowds, aim to arrive before noon or after 18:00. Try ningyo-yaki (small cakes) on Nakamise for ¥200–400.</div>
+    <details class="backup">
+      <summary>⚡ Backup if crowded / rainy</summary>
+      <div class="backup-body"><b>Too crowded at peak:</b> Walk 10 min east to Senso-ji side streets (Hoppy Street / Shin-Nakamise) — much calmer with local food and bars.<br><b>Alternative day:</b> Visit Ueno Park and Tokyo National Museum (¥1,000, great indoor option). Ueno station is 15 min from Asakusa.</div>
+    </details>
+  </div>
+
+  <!-- AFTERNOON -->
+  <div class="period-hdr aftn fi"><div class="period-dot"></div><div class="period-label">🌤️ Afternoon</div><div class="period-line"></div></div>
+
+  <div class="move-conn"><div class="move-vline"></div><div class="move-info">🚇 <strong>Asakusa → Harajuku:</strong> Tokyo Metro Ginza Line to Shibuya (22 min), then 1 min walk to Harajuku area · ~35–45 min total · ¥210</div></div>
+
+  <div class="stop aftn fi">
+    <div class="stop-meta"><span class="stop-time">14:00</span></div>
+    <div class="stop-name"><a href="https://maps.google.com/?q=Meiji+Jingu+Shrine+Tokyo" target="_blank" rel="noopener">Meiji Jingu</a> + <a href="https://maps.google.com/?q=Takeshita+Street+Harajuku+Tokyo" target="_blank" rel="noopener">Takeshita Street</a></div>
+    <div class="stop-tags">
+      <span class="stag dur">⏱ ~2 h</span>
+      <span class="stag cost">💴 ¥500–1,500</span>
+      <span class="stag free">Shrine: Free</span>
+    </div>
+    <p class="stop-what">Walk through the quiet forest to the main shrine, then switch gears to Harajuku's youth culture — sweets, crepes, unique fashion on Takeshita Street (350m).</p>
+    <div class="pro-tip">💡 <strong>Pro Tip:</strong> The forest walk to the shrine is 10 min each way — peaceful and completely free. Takeshita Street starts right at Harajuku station East exit. Marion Crepes is the most popular crepe shop (¥500–700).</div>
+    <details class="backup">
+      <summary>⚡ Backup if crowded / rainy</summary>
+      <div class="backup-body"><b>Rain:</b> Skip the shrine forest and go directly to Harajuku/Omotesando area — both have covered shopping (Laforet, Omotesando Hills mall).<br><b>Alternative:</b> Omotesando avenue is the high-end street just south — great window shopping and architecturally interesting.</div>
+    </details>
+  </div>
+
+  <div class="move-conn"><div class="move-vline"></div><div class="move-info">🚶 Walk 25 min · OR 🚃 JR Yamanote Line 1 stop (3 min, ¥150) · Harajuku → Shibuya</div></div>
+
+  <!-- EVENING -->
+  <div class="period-hdr even fi"><div class="period-dot"></div><div class="period-label">🌆 Evening</div><div class="period-line"></div></div>
+
+  <div class="stop even fi">
+    <div class="stop-meta">
+      <span class="stop-time">16:30</span>
+      <span class="stag book">📅 Book SKY in advance</span>
+    </div>
+    <div class="stop-name"><a href="https://maps.google.com/?q=Shibuya+Crossing+Tokyo" target="_blank" rel="noopener">Shibuya Crossing</a> + optional <a href="https://maps.google.com/?q=SHIBUYA+SKY+Tokyo" target="_blank" rel="noopener">SHIBUYA SKY</a></div>
+    <div class="stop-tags">
+      <span class="stag dur">⏱ ~2 h</span>
+      <span class="stag cost">💴 ¥0 + ¥2,000 SKY</span>
+    </div>
+    <p class="stop-what">Iconic scramble crossing and Hachiko statue (free). If booked in advance, SHIBUYA SKY rooftop gives a dramatic sunset city view at 229m.</p>
+    <div class="pro-tip">💡 <strong>Pro Tip:</strong> Crossing is most impressive at rush hour (18:00–19:00). Best photo angle: 2F Starbucks window (Q-FRONT building) — arrive 30 min early to grab a window seat. SHIBUYA SKY: book online (save ~¥500 vs. door price) and pick a sunset slot (17:00–18:30).</div>
+    <details class="backup">
+      <summary>⚡ Backup if crowded / rainy</summary>
+      <div class="backup-body"><b>Shibuya too crowded:</b> Tokyo Metropolitan Government Building (Tocho) in Shinjuku has a free observation deck (202m). ~20 min by train from Shibuya.<br><b>Rainy + no SKY:</b> Explore Shibuya Hikarie or PARCO shopping complex — both excellent indoor options.</div>
+    </details>
+  </div>
+
+  <div class="move-conn"><div class="move-vline"></div><div class="move-info">🚶 Walk / train 5–20 min depending on choice · Shibuya / Omotesando area</div></div>
+
+  <div class="stop even fi">
+    <div class="stop-meta"><span class="stop-time">19:00</span></div>
+    <div class="stop-name"><a href="https://maps.google.com/?q=ICHIRAN+Shibuya+Tokyo" target="_blank" rel="noopener">ICHIRAN Shibuya</a> or <a href="https://maps.google.com/?q=Tonkatsu+Maisen+Aoyama+Tokyo" target="_blank" rel="noopener">Tonkatsu Maisen Aoyama</a></div>
+    <div class="stop-tags">
+      <span class="stag dur">⏱ ~60–75 min</span>
+      <span class="stag cost">💴 ¥1,200–2,500</span>
+    </div>
+    <p class="stop-what">ICHIRAN: individual booth ramen — simple ordering, good for solo travelers. Maisen: classic tonkatsu in a historic Taisho-era bathhouse building, perfect after Omotesando.</p>
+    <div class="pro-tip">💡 <strong>Pro Tip:</strong> ICHIRAN uses a ticket machine (English options available). Arriving at 19:00 hits the sweet spot — busy but before the post-theater peak. Maisen Aoyama closes around 21:00 on weekdays; check hours. Reservations not possible at ICHIRAN — just queue.</div>
+    <details class="backup">
+      <summary>⚡ Backup if crowded / rainy</summary>
+      <div class="backup-body"><b>Long line at both:</b> Shibuya/Omotesando department store restaurant floors (B1 or top floors of Shibuya Hikarie, Shibuya Scramble Square) have reliable options with shorter waits.</div>
+    </details>
+  </div>
+
+  <!-- Food Options -->
+  <div class="sec-hdr fi">🍽️ Food Options</div>
+
+  <div class="food-card fi">
+    <div class="food-cat" style="color:var(--morn)">Breakfast / Market</div>
+    <div class="food-row"><span class="food-lbl">Main:</span><span class="food-val"><a href="https://maps.google.com/?q=Tsukiji+Outer+Market" target="_blank">Tsukiji Outer Market</a></span></div>
+    <div class="food-row"><span class="food-lbl">Backup 1:</span><span class="food-val"><a href="https://maps.google.com/?q=Tsukiji+Yamacho" target="_blank">Tsukiji Yamacho</a></span></div>
+    <div class="food-row"><span class="food-lbl">Backup 2:</span><span class="food-val"><a href="https://maps.google.com/?q=Sushizanmai+Tsukiji" target="_blank">Sushizanmai</a></span></div>
+    <div class="food-why">Easy to understand for tourists — many small food options, English signs, and you can eat while standing.</div>
+  </div>
+
+  <div class="food-card fi">
+    <div class="food-cat" style="color:var(--aftn)">Ramen</div>
+    <div class="food-row"><span class="food-lbl">Main:</span><span class="food-val"><a href="https://maps.google.com/?q=ICHIRAN+Shibuya" target="_blank">ICHIRAN Shibuya</a></span></div>
+    <div class="food-row"><span class="food-lbl">Backup 1:</span><span class="food-val">Ramen street in Tokyo Station / mall ramen</span></div>
+    <div class="food-row"><span class="food-lbl">Backup 2:</span><span class="food-val">Local ramen near hotel</span></div>
+    <div class="food-why">Solo booth system is tourist-friendly. No Japanese needed. Open late. One of the most consistent ramen chains in Japan.</div>
+  </div>
+
+  <div class="food-card fi">
+    <div class="food-cat" style="color:var(--even)">Tonkatsu (Dinner)</div>
+    <div class="food-row"><span class="food-lbl">Main:</span><span class="food-val"><a href="https://maps.google.com/?q=Tonkatsu+Maisen+Aoyama" target="_blank">Tonkatsu Maisen Aoyama</a></span></div>
+    <div class="food-row"><span class="food-lbl">Backup 1:</span><span class="food-val">Ginza tonkatsu shops</span></div>
+    <div class="food-row"><span class="food-lbl">Backup 2:</span><span class="food-val">Department-store food floors</span></div>
+    <div class="food-why">Good dinner option after Harajuku / Omotesando. Maisen's Taisho-era building is part of the experience. Budget ¥1,800–2,500.</div>
+  </div>
+
+  <div class="food-card fi">
+    <div class="food-cat" style="color:#6366F1">View / Night</div>
+    <div class="food-row"><span class="food-lbl">Main:</span><span class="food-val"><a href="https://maps.google.com/?q=SHIBUYA+SKY" target="_blank">SHIBUYA SKY</a> (¥2,000+, book ahead)</span></div>
+    <div class="food-row"><span class="food-lbl">Backup 1:</span><span class="food-val"><a href="https://maps.google.com/?q=Tokyo+Metropolitan+Government+Building" target="_blank">Tokyo Metropolitan Govt. Building</a> (Free)</span></div>
+    <div class="food-row"><span class="food-lbl">Backup 2:</span><span class="food-val">Shibuya Scramble Square 14F (free viewing area)</span></div>
+    <div class="food-why">Paid iconic view vs. free Shinjuku view. Both are worth it depending on budget and how much the skyline matters to you.</div>
+  </div>
+
+  <!-- Flexible Alternatives -->
+  <div class="sec-hdr fi">⚡ Flexible Alternatives</div>
+
+  <details class="alt-card fi" data-types="rainy">
+    <summary><span class="alt-scenario sc-rainy">🌧️ Rainy Day</span></summary>
+    <div class="alt-body"><b>Switch to:</b> <a href="https://maps.google.com/?q=Tokyo+National+Museum+Ueno" target="_blank">Tokyo National Museum</a> → Ginza underground / Tokyo Station food hall → <a href="https://maps.google.com/?q=teamLab+Planets+Toyosu" target="_blank">teamLab Planets</a> (book in advance).<br><b>Reason:</b> More indoor time, less walking outside. Tokyo Station's underground concourse connects many dry areas. teamLab Planets is completely indoor and one of the most memorable experiences in Japan.</div>
+  </details>
+
+  <details class="alt-card fi" data-types="crowd">
+    <summary><span class="alt-scenario sc-crowd">😤 Very Crowded Asakusa</span></summary>
+    <div class="alt-body"><b>Switch to:</b> Visit Sensoji very early morning or evening instead. Replace the midday slot with Ueno Park + Ueno Zoo (¥600) or Ginza area.<br><b>Reason:</b> Asakusa and Nakamise become extremely stressful 11:00–15:00, especially on weekends and holidays. Early morning (before 09:00) is magical — almost no one there.</div>
+  </details>
+
+  <details class="alt-card fi" data-types="tired">
+    <summary><span class="alt-scenario sc-tired">😴 Too Tired</span></summary>
+    <div class="alt-body"><b>Switch to:</b> Tsukiji → Ginza walk → Tokyo Station (shopping + lunch) → Shinjuku free view (Tocho) only.<br><b>Reason:</b> Shorter total walking distance. Ginza and Tokyo Station have excellent rest spots, cafes, and indoor shopping. Tocho free observation deck is a good alternative to SHIBUYA SKY.</div>
+  </details>
+
+  <details class="alt-card fi" data-types="food">
+    <summary><span class="alt-scenario sc-food">🍜 Food-First Traveler</span></summary>
+    <div class="alt-body"><b>Switch to:</b> Tsukiji (extended 2h food tour) → Asakusa snacks (ningyo-yaki, senbei) → Harajuku sweets (crepes, Laduree) → Shibuya ramen dinner.<br><b>Reason:</b> Turns sightseeing into a food route. Each area has distinct food identity. You still see Tokyo's key neighborhoods while eating local at every stop.</div>
+  </details>
+
+  <details class="alt-card fi" data-types="budget">
+    <summary><span class="alt-scenario sc-budget">💰 Low Budget</span></summary>
+    <div class="alt-body"><b>Switch to:</b> Tsukiji snacks (¥500) → Free Sensoji → Free Meiji Jingu → Shibuya Crossing (free) → <a href="https://maps.google.com/?q=Tokyo+Metropolitan+Government+Building" target="_blank">Tocho free view</a> → convenience store dinner.<br><b>Reason:</b> Reduces paid tickets to near zero while keeping all iconic spots. 7-Eleven/Lawson dinner ¥500–700 is genuinely good in Japan. Total day budget: ¥1,500–2,500.</div>
+  </details>
+
+  <!-- Day Budget -->
+  <div class="budget-box fi">
+    <h3>📊 Day Budget Estimate (per person)</h3>
+    <div class="budget-row"><span class="cat">Tsukiji breakfast + snacks</span><span class="amt">¥800–1,500</span></div>
+    <div class="budget-row"><span class="cat">Sensoji / Meiji Jingu</span><span class="amt">Free</span></div>
+    <div class="budget-row"><span class="cat">Harajuku sweets</span><span class="amt">¥500–1,000</span></div>
+    <div class="budget-row"><span class="cat">SHIBUYA SKY (optional)</span><span class="amt">¥2,000</span></div>
+    <div class="budget-row"><span class="cat">Dinner (ICHIRAN / Maisen)</span><span class="amt">¥1,200–2,500</span></div>
+    <div class="budget-row"><span class="cat">Transport (IC Card)</span><span class="amt">¥800–1,200</span></div>
+    <div class="budget-total"><span class="lbl">Day Total</span><span class="val">¥5,000–8,500</span></div>
+    <div class="budget-note">* Budget route (no SKY, konbini dinner): ¥1,500–2,500 · All prices approximate and subject to change.</div>
+  </div>
+
+  <div class="imp-note fi"><strong>⚠️ Important:</strong> Book SHIBUYA SKY or teamLab Planets in advance — they sell out on weekends. Always check shop hours, ticket availability, and last entry on the day you visit.</div>
+</section>
+
+
+<!-- ════════════════════ KYOTO ════════════════════ -->
+<section id="kyoto" class="city-sec">
+  <div class="city-hero kyo fi">
+    <h1>KYOTO</h1>
+    <div class="tagline">Flexible 1-day culture, temples &amp; food plan</div>
+    <div class="best-for"><strong>Best for:</strong> First-time Kyoto visitors, culture lovers, couples, food + old-street photos.</div>
+  </div>
+
+  <!-- MORNING -->
+  <div class="period-hdr morn fi"><div class="period-dot"></div><div class="period-label">☀️ Morning</div><div class="period-line"></div></div>
+
+  <div class="stop morn fi">
+    <div class="stop-meta">
+      <span class="stop-time">08:00</span>
+      <span class="stag crowd-hi">🔴 Very popular</span>
+      <span class="stag free">Free · 24h</span>
+    </div>
+    <div class="stop-name"><a href="https://maps.google.com/?q=Fushimi+Inari+Taisha+Kyoto" target="_blank" rel="noopener">Fushimi Inari Taisha</a></div>
+    <div class="stop-tags">
+      <span class="stag dur">⏱ 1.5–2 h</span>
+      <span class="stag cost">💴 Free</span>
+    </div>
+    <p class="stop-what">Start early for the famous red torii gates. Walk only as far as your energy allows — the first 30 min of trail (to Yotsutsuji viewpoint) is the most photogenic section.</p>
+    <div class="pro-tip">💡 <strong>Pro Tip:</strong> At 08:00 the tunnel of torii has only a handful of people — by 10:00 it's packed with tour groups. Full summit hike (Inari-san) takes 2–3 hours round trip. The Yotsutsuji viewpoint is about 30 min up and gives you a great city view + near-empty torii shots. Kyoto Station to JR Inari: JR Nara Line, 5 min, ¥140.</div>
+    <details class="backup">
+      <summary>⚡ Backup if crowded / rainy</summary>
+      <div class="backup-body"><b>Crowded:</b> Come before 08:00 or after 16:00 — the torii look beautiful at dusk too. Check the <a href="https://maps.google.com/?q=Fushimi+Inari+Taisha" target="_blank">Kyoto City congestion forecast</a> on holidays.<br><b>Rain:</b> The torii tunnels are covered and atmospheric in rain — actually a great photo opportunity. Bring waterproof shoes as the stone paths get slippery.</div>
+    </details>
+  </div>
+
+  <div class="move-conn"><div class="move-vline"></div><div class="move-info">🚌 <strong>Fushimi Inari → Kiyomizu-dera:</strong> Walk 10 min to Tofukuji, then Bus 207 to Kiyomizumichi (~30 min, ¥230) · OR taxi ¥1,200–1,500 (~20 min) · Total: ~40–50 min</div></div>
+
+  <div class="stop morn fi">
+    <div class="stop-meta">
+      <span class="stop-time">10:15</span>
+      <span class="stag crowd-hi">🔴 Very popular</span>
+      <span class="stag cost">💴 ¥500 entry</span>
+    </div>
+    <div class="stop-name"><a href="https://maps.google.com/?q=Kiyomizu-dera+Temple+Kyoto" target="_blank" rel="noopener">Kiyomizu-dera Temple</a> + Ninenzaka / Sannenzaka</div>
+    <div class="stop-tags">
+      <span class="stag dur">⏱ ~2 h</span>
+      <span class="stag cost">💴 ¥500–1,500</span>
+    </div>
+    <p class="stop-what">Classic Kyoto temple view from the wooden stage (no nails used). Then walk down through beautifully preserved Ninenzaka and Sannenzaka streets — souvenir shops and cafes.</p>
+    <div class="pro-tip">💡 <strong>Pro Tip:</strong> Buy your temple ticket at the main Niomon gate (¥500, no advance booking needed). The wooden stage photo is best from the Okuno-in sub-temple to the left. Ninenzaka/Sannenzaka below takes about 20–30 min to walk and has many matcha soft cream shops (¥400–600).</div>
+    <details class="backup">
+      <summary>⚡ Backup if crowded / rainy</summary>
+      <div class="backup-body"><b>Streets packed:</b> Shorten time on Sannenzaka and head directly to Gion by taxi (~¥1,000) or bus.<br><b>Note on repairs:</b> Some parts of the Kiyomizu complex have ongoing restoration work — the main stage and temple are fully accessible. Check the official site for current status.</div>
+    </details>
+  </div>
+
+  <!-- AFTERNOON -->
+  <div class="period-hdr aftn fi"><div class="period-dot"></div><div class="period-label">🌤️ Afternoon</div><div class="period-line"></div></div>
+
+  <div class="move-conn"><div class="move-vline"></div><div class="move-info">🚶 Walk ~20–30 min (scenic route through Sannenzaka and Gion area) · OR 🚌 Bus 207 to Shijo (~15 min, ¥230)</div></div>
+
+  <div class="stop aftn fi">
+    <div class="stop-meta">
+      <span class="stop-time">12:45</span>
+      <span class="stag crowd-med">⚠️ Popular at lunch</span>
+    </div>
+    <div class="stop-name"><a href="https://maps.google.com/?q=Nishiki+Market+Kyoto" target="_blank" rel="noopener">Nishiki Market</a></div>
+    <div class="stop-tags">
+      <span class="stag dur">⏱ ~60–75 min</span>
+      <span class="stag cost">💴 ¥500–1,200</span>
+    </div>
+    <p class="stop-what">Kyoto's "kitchen" — 400m covered arcade with Kyoto snacks, yuba (tofu skin), pickles, matcha sweets. Eat at shop counters — walking while eating is considered rude here.</p>
+    <div class="pro-tip">💡 <strong>Pro Tip:</strong> Best stops — Yubahan (yuba tofu), Nishiki Warai (grilled octopus skewer), Murakami-ju (Kyoto pickles), Nishiki Wakana (matcha ice cream). Market shops generally open 10:00–18:00. Very narrow at peak lunch — go to one end and work through systematically.</div>
+    <details class="backup">
+      <summary>⚡ Backup if crowded / rainy</summary>
+      <div class="backup-body"><b>Too crowded:</b> Visit after 15:00 instead (fewer tour groups). Alternative: eat lunch at a restaurant in the Kawaramachi/Shijo area nearby.<br><b>Note:</b> Several Nishiki Market shops close on Wednesdays.</div>
+    </details>
+  </div>
+
+  <div class="move-conn"><div class="move-vline"></div><div class="move-info">🚶 Walk ~8–12 min to Honke Owariya · OR ~15 min walk to Gion Izuju</div></div>
+
+  <div class="stop aftn fi">
+    <div class="stop-meta"><span class="stop-time">14:30</span></div>
+    <div class="stop-name"><a href="https://maps.google.com/?q=Honke+Owariya+Kyoto" target="_blank" rel="noopener">Honke Owariya</a> or <a href="https://maps.google.com/?q=Gion+Izuju+Kyoto" target="_blank" rel="noopener">Gion Izuju</a></div>
+    <div class="stop-tags">
+      <span class="stag dur">⏱ ~60–75 min</span>
+      <span class="stag cost">💴 ¥1,200–1,800</span>
+    </div>
+    <p class="stop-what">Honke Owariya: historic soba restaurant operating since 1465 — a genuine piece of Kyoto history. Gion Izuju: Kyoto-style pressed sushi (battera) — very local taste.</p>
+    <div class="pro-tip">💡 <strong>Pro Tip:</strong> Honke Owariya is on Teramachi-dori and opens for lunch at 11:00. The hiyashi soba (cold soba) is recommended in summer. Gion Izuju's saba battera (mackerel pressed sushi) is a Kyoto specialty you won't find easily outside Kansai.</div>
+    <details class="backup">
+      <summary>⚡ Backup if crowded / rainy</summary>
+      <div class="backup-body"><b>Lines too long:</b> Kyoto Station has reliable, good-quality restaurants underground (The Cube food hall) — no reservations needed, and it's on your route home. Budget ¥1,000–1,500.</div>
+    </details>
+  </div>
+
+  <!-- EVENING -->
+  <div class="period-hdr even fi"><div class="period-dot"></div><div class="period-label">🌆 Evening</div><div class="period-line"></div></div>
+
+  <div class="move-conn"><div class="move-vline"></div><div class="move-info">🚶 Walk ~15–25 min to Gion / Hanamikoji area · OR 🚌 Bus to Gion-Shijo (~10 min, ¥230)</div></div>
+
+  <div class="stop even fi">
+    <div class="stop-meta"><span class="stop-time">16:00</span></div>
+    <div class="stop-name"><a href="https://maps.google.com/?q=Gion+District+Kyoto" target="_blank" rel="noopener">Gion</a> + Kiyomizu area / <a href="https://maps.google.com/?q=Pontocho+Alley+Kyoto" target="_blank" rel="noopener">Pontocho walk</a></div>
+    <div class="stop-tags">
+      <span class="stag dur">⏱ ~2 h</span>
+      <span class="stag cost">💴 Free walking</span>
+    </div>
+    <p class="stop-what">Evening walk through historic streets — Hanamikoji Street, Shimbashi area (lined with traditional ochaya teahouses), then riverside Pontocho alley with its intimate lantern-lit restaurants.</p>
+    <div class="pro-tip">💡 <strong>Pro Tip:</strong> Best time to spot geiko/maiko is 17:30–18:30 near Hanamikoji Street — they walk to appointments. No touching, no flash, keep distance. Pontocho riverside (Kamo River) terraces open in summer (May–Sep) — magical dinner experience. Yasaka Shrine at the east end is beautiful at dusk (free, always open).</div>
+    <details class="backup">
+      <summary>⚡ Backup if crowded / rainy</summary>
+      <div class="backup-body"><b>Rain:</b> Switch to Kyoto International Manga Museum (¥900, near Karasuma Oike station) or Kyoto Railway Museum (¥1,200, near Kyoto Station) — both excellent indoor options.<br><b>Alternative evening:</b> Nijo Castle illumination events (seasonal, check schedule).</div>
+    </details>
+  </div>
+
+  <div class="move-conn"><div class="move-vline"></div><div class="move-info">🚶 Walk ~20–30 min to Menbaka · OR 🚌 Bus to Kyoto Station area</div></div>
+
+  <div class="stop even fi">
+    <div class="stop-meta">
+      <span class="stop-time">18:30</span>
+      <span class="stag book">📅 Reservation strongly recommended</span>
+    </div>
+    <div class="stop-name"><a href="https://maps.google.com/?q=Menbaka+Fire+Ramen+Kyoto" target="_blank" rel="noopener">Menbaka Fire Ramen</a> or Pontocho dinner</div>
+    <div class="stop-tags">
+      <span class="stag dur">⏱ ~60–75 min</span>
+      <span class="stag cost">💴 ¥1,200–2,000</span>
+    </div>
+    <p class="stop-what">Menbaka: theatrical ramen where burning scallion oil is poured on your bowl tableside — dramatic and memorable. Or a more atmospheric Pontocho dinner with river views.</p>
+    <div class="pro-tip">💡 <strong>Pro Tip:</strong> Menbaka opens for dinner around 17:30 and has limited seats — call ahead or use the reservation system on their website. The "fire" only happens if you add the scallion oil — staff will warn you. Very popular for content creators. Pontocho alternative: look for restaurants showing plastic food models outside with English menus — these are tourist-friendly.</div>
+    <details class="backup">
+      <summary>⚡ Backup if crowded / rainy</summary>
+      <div class="backup-body"><b>Menbaka fully booked:</b> Ramen near Kyoto Station (Kyoto Ramen Koji on the 10th floor) or return to Pontocho for a sit-down dinner. Pontocho also has some accessible casual spots for ¥1,500–2,500.</div>
+    </details>
+  </div>
+
+  <!-- Food Options -->
+  <div class="sec-hdr fi">🍽️ Food Options</div>
+
+  <div class="food-card fi">
+    <div class="food-cat" style="color:var(--morn)">Kyoto Market</div>
+    <div class="food-row"><span class="food-lbl">Main:</span><span class="food-val"><a href="https://maps.google.com/?q=Nishiki+Market+Kyoto" target="_blank">Nishiki Market</a></span></div>
+    <div class="food-row"><span class="food-lbl">Backup 1:</span><span class="food-val">Nishiki Market north end restaurants</span></div>
+    <div class="food-row"><span class="food-lbl">Backup 2:</span><span class="food-val">Nearby restaurants around Kawaramachi</span></div>
+    <div class="food-why">Easy introduction to Kyoto ingredients and snacks. No Japanese needed — point and buy.</div>
+  </div>
+
+  <div class="food-card fi">
+    <div class="food-cat" style="color:var(--aftn)">Soba</div>
+    <div class="food-row"><span class="food-lbl">Main:</span><span class="food-val"><a href="https://maps.google.com/?q=Honke+Owariya+Kyoto" target="_blank">Honke Owariya</a> (since 1465)</span></div>
+    <div class="food-row"><span class="food-lbl">Backup 1:</span><span class="food-val">Local soba near Karasuma Oike station</span></div>
+    <div class="food-row"><span class="food-lbl">Backup 2:</span><span class="food-val">Kyoto Station underground restaurants</span></div>
+    <div class="food-why">Traditional Kyoto feel. The restaurant itself is inside a beautiful townhouse. Arrive at 14:00–14:30 to miss lunch rush.</div>
+  </div>
+
+  <div class="food-card fi">
+    <div class="food-cat" style="color:var(--kyo)">Kyoto Sushi</div>
+    <div class="food-row"><span class="food-lbl">Main:</span><span class="food-val"><a href="https://maps.google.com/?q=Gion+Izuju+Kyoto" target="_blank">Gion Izuju</a></span></div>
+    <div class="food-row"><span class="food-lbl">Backup 1:</span><span class="food-val">Izuu / other Gion sushi shops</span></div>
+    <div class="food-row"><span class="food-lbl">Backup 2:</span><span class="food-val">Takeaway pressed sushi from Nishiki</span></div>
+    <div class="food-why">Kyoto-style pressed sushi (oshi-zushi) is completely different from Edomae sushi. Worth trying if you want a local food experience.</div>
+  </div>
+
+  <div class="food-card fi">
+    <div class="food-cat" style="color:var(--even)">Experience Ramen</div>
+    <div class="food-row"><span class="food-lbl">Main:</span><span class="food-val"><a href="https://maps.google.com/?q=Menbaka+Fire+Ramen+Kyoto" target="_blank">Menbaka Fire Ramen</a></span></div>
+    <div class="food-row"><span class="food-lbl">Backup 1:</span><span class="food-val">Kyoto Ramen Koji (10F Kyoto Station)</span></div>
+    <div class="food-row"><span class="food-lbl">Backup 2:</span><span class="food-val">Pontocho dinner (any accessible restaurant)</span></div>
+    <div class="food-why">Highly memorable for photos/video — the fire is real and impressive. May need booking. If too far, Kyoto Station ramen is equally convenient.</div>
+  </div>
+
+  <!-- Flexible Alternatives -->
+  <div class="sec-hdr fi">⚡ Flexible Alternatives</div>
+
+  <details class="alt-card fi" data-types="rainy">
+    <summary><span class="alt-scenario sc-rainy">🌧️ Rainy Day</span></summary>
+    <div class="alt-body"><b>Switch to:</b> Kyoto Station → <a href="https://maps.google.com/?q=Nishiki+Market+Kyoto" target="_blank">Nishiki Market</a> → <a href="https://maps.google.com/?q=Kyoto+International+Manga+Museum" target="_blank">Kyoto International Manga Museum</a> → <a href="https://maps.google.com/?q=Menbaka+Fire+Ramen+Kyoto" target="_blank">Menbaka Fire Ramen</a><br><b>Reason:</b> More indoor or covered stops; fewer temple stairs. Kyoto Station itself is architecturally impressive and worth exploring on a rainy day.</div>
+  </details>
+
+  <details class="alt-card fi" data-types="crowd">
+    <summary><span class="alt-scenario sc-crowd">😤 Crowded Fushimi / Kiyomizu</span></summary>
+    <div class="alt-body"><b>Switch to:</b> Use <a href="https://maps.google.com/?q=Fushimi+Inari+Taisha+Kyoto" target="_blank">Kyoto City congestion map</a> and shift Fushimi to 07:00 (less crowded) or late afternoon 16:00+.<br><b>Reason:</b> Kyoto crowds can completely change the experience. Fushimi at 08:00 vs. 11:00 feels like a different place. Kiyomizu is best visited on weekday mornings.</div>
+  </details>
+
+  <details class="alt-card fi" data-types="tired">
+    <summary><span class="alt-scenario sc-tired">😴 Too Tired</span></summary>
+    <div class="alt-body"><b>Switch to:</b> Kyoto Station → Nishiki Market → Gion / Pontocho evening walk only.<br><b>Reason:</b> Shorter transfers and still feels authentically like Kyoto. Gion in the evening is the most atmospheric part of the city and requires no uphill walking.</div>
+  </details>
+
+  <details class="alt-card fi" data-types="nature">
+    <summary><span class="alt-scenario sc-nature">🌿 Nature-First</span></summary>
+    <div class="alt-body"><b>Switch to:</b> Replace the downtown afternoon with <a href="https://maps.google.com/?q=Arashiyama+Bamboo+Grove+Kyoto" target="_blank">Arashiyama</a> (bamboo grove, Togetsukyo bridge, Tenryuji temple garden).<br><b>Reason:</b> Better for bamboo grove, river scenery, and relaxed photos. Arashiyama from Kyoto Station: Sagano Line, ~15 min, ¥240.</div>
+  </details>
+
+  <details class="alt-card fi" data-types="family">
+    <summary><span class="alt-scenario sc-family">👨‍👩‍👧 Family / Kids</span></summary>
+    <div class="alt-body"><b>Switch to:</b> Kyoto Station → <a href="https://maps.google.com/?q=Kyoto+Railway+Museum" target="_blank">Kyoto Railway Museum</a> (¥1,200 adult / ¥500 child) → Nishiki Market → easy dinner.<br><b>Reason:</b> Less walking, more indoor learning and rest. Kids love the train simulators. The museum is right next to Kyoto Station.</div>
+  </details>
+
+  <!-- Day Budget -->
+  <div class="budget-box fi">
+    <h3>📊 Day Budget Estimate (per person)</h3>
+    <div class="budget-row"><span class="cat">Fushimi Inari</span><span class="amt">Free</span></div>
+    <div class="budget-row"><span class="cat">Kiyomizu-dera entry</span><span class="amt">¥500</span></div>
+    <div class="budget-row"><span class="cat">Nishiki Market snacks</span><span class="amt">¥500–1,200</span></div>
+    <div class="budget-row"><span class="cat">Lunch (Owariya / Izuju)</span><span class="amt">¥1,200–1,800</span></div>
+    <div class="budget-row"><span class="cat">Dinner (Menbaka / Pontocho)</span><span class="amt">¥1,500–2,500</span></div>
+    <div class="budget-row"><span class="cat">Transport (IC Card / Bus)</span><span class="amt">¥500–800</span></div>
+    <div class="budget-total"><span class="lbl">Day Total</span><span class="val">¥4,200–6,800</span></div>
+    <div class="budget-note">* Budget route (skip lunch restaurant, konbini + market snacks): ¥1,500–2,500</div>
+  </div>
+
+  <div class="imp-note fi"><strong>⚠️ Kyoto Manners:</strong> Do not block narrow streets for photos — locals walk these daily. At Nishiki Market, eat at the shop or in designated areas — do not walk and eat. Geiko/maiko should be observed respectfully from a distance, never touched or blocked for selfies.</div>
+</section>
+
+
+<!-- ════════════════════ OSAKA ════════════════════ -->
+<section id="osaka" class="city-sec">
+  <div class="city-hero osa fi">
+    <h1>OSAKA</h1>
+    <div class="tagline">Flexible 1-day food, castle &amp; nightlife plan</div>
+    <div class="best-for"><strong>Best for:</strong> Food lovers, friends, first-time Osaka visitors, night-photo travelers.</div>
+  </div>
+
+  <!-- MORNING -->
+  <div class="period-hdr morn fi"><div class="period-dot"></div><div class="period-label">☀️ Morning</div><div class="period-line"></div></div>
+
+  <div class="stop morn fi">
+    <div class="stop-meta">
+      <span class="stop-time">09:30</span>
+      <span class="stag cost">💴 ¥600 tower</span>
+    </div>
+    <div class="stop-name"><a href="https://maps.google.com/?q=Osaka+Castle+Museum" target="_blank" rel="noopener">Osaka Castle Museum</a></div>
+    <div class="stop-tags">
+      <span class="stag dur">⏱ ~90 min</span>
+      <span class="stag free">Park: Free</span>
+    </div>
+    <p class="stop-what">Castle exterior, park, and museum if interested in history. Opens 09:00. The park grounds are free — tower entry is optional (¥600 with elevator access).</p>
+    <div class="pro-tip">💡 <strong>Pro Tip:</strong> The castle tower closes at 17:00 (last entry 16:30) — visit early so you have the option. Best exterior photo: from the South bridge or the Nishi-no-Maru garden. The museum inside covers Toyotomi Hideyoshi's era with English panels.</div>
+    <details class="backup">
+      <summary>⚡ Backup if crowded / rainy</summary>
+      <div class="backup-body"><b>Rain:</b> Spend more time inside the museum. The tower has good views even in light rain.<br><b>Start later option:</b> If you prefer sleeping in, shift to 10:30 start and reduce castle time to 60 min — still time for everything.</div>
+    </details>
+  </div>
+
+  <div class="move-conn"><div class="move-vline"></div><div class="move-info">🚇 <strong>Osaka Castle → Kuromon:</strong> Osaka Metro Nagahori Tsurumi-ryokuchi Line · Tanimachi Yonchome → Nipponbashi (2 stops, 5 min, ¥230) · Walk 5 min to Kuromon · Total ~20 min</div></div>
+
+  <!-- AFTERNOON -->
+  <div class="period-hdr aftn fi"><div class="period-dot"></div><div class="period-label">🌤️ Afternoon</div><div class="period-line"></div></div>
+
+  <div class="stop aftn fi">
+    <div class="stop-meta">
+      <span class="stop-time">11:30</span>
+      <span class="stag crowd-med">⚠️ Popular at lunch</span>
+    </div>
+    <div class="stop-name"><a href="https://maps.google.com/?q=Kuromon+Market+Osaka" target="_blank" rel="noopener">Kuromon Market</a></div>
+    <div class="stop-tags">
+      <span class="stag dur">⏱ ~90 min</span>
+      <span class="stag cost">💴 ¥500–1,500</span>
+    </div>
+    <p class="stop-what">Osaka's kitchen — 170+ stalls with fresh seafood, grilled scallops, wagyu beef, fruit. Eat as you go. The market is about 580m long — one pass is enough.</p>
+    <div class="pro-tip">💡 <strong>Pro Tip:</strong> Must-try: fresh sea urchin (uni) on toast (~¥500), grilled scallops (~¥300), wagyu skewer (~¥600–1,000). Most shops open 08:00–18:00 — afternoon is fresher than morning for cooked items. Bring cash — not all stalls accept cards.</div>
+    <details class="backup">
+      <summary>⚡ Backup if crowded / rainy</summary>
+      <div class="backup-body"><b>Too crowded:</b> Move directly to Namba area restaurants and return to Kuromon at 14:00–15:00 when the lunch rush subsides.<br><b>All closed (check holidays):</b> Kuromon has some closures on Sundays for individual shops. Namba restaurants nearby are always available.</div>
+    </details>
+  </div>
+
+  <div class="move-conn"><div class="move-vline"></div><div class="move-info">🚶 Walk ~10–15 min · Kuromon to Namba / Dotonbori area</div></div>
+
+  <div class="stop aftn fi">
+    <div class="stop-meta"><span class="stop-time">13:30</span></div>
+    <div class="stop-name"><a href="https://maps.google.com/?q=Dotonbori+Osaka" target="_blank" rel="noopener">Namba / Dotonbori</a> walk</div>
+    <div class="stop-tags">
+      <span class="stag dur">⏱ ~30 min</span>
+      <span class="stag cost">💴 Free walking</span>
+    </div>
+    <p class="stop-what">Shopping, photos, short cafe break. Shinsaibashi-suji covered arcade is just north of Dotonbori — 600m of shops. Good time to explore before lunch crowds thin.</p>
+    <div class="pro-tip">💡 <strong>Pro Tip:</strong> The Dotonbori Canal cruise (¥900, 20 min) departs from Namba Walk pier — unique perspective on the neon signs. Den-Den Town (electronics/anime) is 10 min east for otaku shopping. Covered Shinsaibashi arcade connects north toward Umeda underground.</div>
+    <details class="backup">
+      <summary>⚡ Backup if crowded / rainy</summary>
+      <div class="backup-body"><b>Rain:</b> Use the extensive covered arcades (Shinsaibashi-suji, America-mura, Namba Walk underground) — you can walk for hours without getting wet.</div>
+    </details>
+  </div>
+
+  <div class="move-conn"><div class="move-vline"></div><div class="move-info">🚶 Walk 5–10 min within Dotonbori area</div></div>
+
+  <div class="stop aftn fi">
+    <div class="stop-meta">
+      <span class="stop-time">14:00</span>
+      <span class="stag crowd-med">⚠️ Lines possible</span>
+    </div>
+    <div class="stop-name"><a href="https://maps.google.com/?q=Okonomiyaki+Mizuno+Dotonbori+Osaka" target="_blank" rel="noopener">Okonomiyaki Mizuno</a> or <a href="https://maps.google.com/?q=Dotonbori+Imai+Osaka" target="_blank" rel="noopener">Dotonbori Imai</a></div>
+    <div class="stop-tags">
+      <span class="stag dur">⏱ ~60–75 min</span>
+      <span class="stag cost">💴 ¥1,200–1,600</span>
+    </div>
+    <p class="stop-what">Mizuno: Osaka-style okonomiyaki (yamaimoiri type with mountain yam — fluffy and light). Imai: classic udon in a calmer, local-feeling setting if okonomiyaki isn't your preference.</p>
+    <div class="pro-tip">💡 <strong>Pro Tip:</strong> Mizuno opens at 11:00. The yamaimo-iri pork okonomiyaki is the signature dish (~¥1,200). The cook grills it on the table in front of you. Arriving at 14:00 is better than 12:00 — the lunch rush subsides. Imai has been serving udon since 1949 and is in a beautiful old building.</div>
+    <details class="backup">
+      <summary>⚡ Backup if crowded / rainy</summary>
+      <div class="backup-body"><b>Mizuno line too long:</b> Chibo (nearby) or any other Dotonbori okonomiyaki restaurant — there are many options within 2 minutes' walk.<br><b>Prefer something lighter:</b> Kani Doraku (crab restaurant) or any sushi counter along Dotonbori are excellent alternatives.</div>
+    </details>
+  </div>
+
+  <!-- EVENING -->
+  <div class="period-hdr even fi"><div class="period-dot"></div><div class="period-label">🌆 Evening</div><div class="period-line"></div></div>
+
+  <div class="move-conn"><div class="move-vline"></div><div class="move-info">🚶 Walk 5 min within Dotonbori · Glico sign is at Ebisubashi bridge</div></div>
+
+  <div class="stop even fi">
+    <div class="stop-meta"><span class="stop-time">16:00</span></div>
+    <div class="stop-name"><a href="https://maps.google.com/?q=Dotonbori+Osaka" target="_blank" rel="noopener">Dotonbori</a> + <a href="https://maps.google.com/?q=Takoya+Dotonbori+Kukuru+Osaka" target="_blank" rel="noopener">Takoya Dotonbori Kukuru</a></div>
+    <div class="stop-tags">
+      <span class="stag dur">⏱ ~90 min</span>
+      <span class="stag cost">💴 ¥500–800</span>
+    </div>
+    <p class="stop-what">Glico running man sign, canal walk, takoyaki from Kukuru (melting center, 8 pieces). This is the classic Osaka street-food mood — neon signs, crowds, energy.</p>
+    <div class="pro-tip">💡 <strong>Pro Tip:</strong> The Glico sign is best photographed from Ebisubashi bridge at dusk (around 18:00–18:30) when it lights up against the fading sky. Kukuru's takoyaki have a liquid center — let them cool slightly before eating. The canal cruise (¥900) from Namba Walk pier is especially atmospheric in the evening.</div>
+    <details class="backup">
+      <summary>⚡ Backup if crowded / rainy</summary>
+      <div class="backup-body"><b>Too crowded:</b> Take photos from side streets or from the bridge. Come back at 21:00–22:00 for night photos with fewer people blocking the shot.<br><b>Alternative snack:</b> Rikuro Ojisan cheesecake shop is nearby — the fresh-baked jiggly cheesecake (~¥935 for whole cake) is a famous Osaka souvenir.</div>
+    </details>
+  </div>
+
+  <div class="move-conn"><div class="move-vline"></div><div class="move-info">🚇 Osaka Metro Midosuji Line · Namba → Dobutsuen-mae (2 stops, 4 min, ¥230) · Walk 5 min to Shinsekai · Total ~20 min</div></div>
+
+  <div class="stop even fi">
+    <div class="stop-meta"><span class="stop-time">18:00</span></div>
+    <div class="stop-name"><a href="https://maps.google.com/?q=Shinsekai+Osaka" target="_blank" rel="noopener">Shinsekai</a> + <a href="https://maps.google.com/?q=Kushikatsu+Daruma+Shinsekai+Osaka" target="_blank" rel="noopener">Kushikatsu Daruma</a></div>
+    <div class="stop-tags">
+      <span class="stag dur">⏱ ~90 min</span>
+      <span class="stag cost">💴 ¥1,500–2,000</span>
+    </div>
+    <p class="stop-what">Retro Osaka at its most authentic — neon-lit showa-era streets around Tsutenkaku tower. Daruma is the legendary kushikatsu (breaded fried skewers) restaurant.</p>
+    <div class="pro-tip">💡 <strong>Pro Tip:</strong> The #1 Kushikatsu Rule: NEVER dip twice into the shared sauce — pour it over, or the staff will stop you. Order one by one and mix different types. Daruma has multiple branches in Shinsekai — the original is the smaller one. Arrive at 18:00–18:30 to avoid the worst wait. Budget: ~¥1,500–2,000 for 10–15 skewers + drinks.</div>
+    <details class="backup">
+      <summary>⚡ Backup if crowded / rainy</summary>
+      <div class="backup-body"><b>Tired / no Shinsekai:</b> Stay in Dotonbori and find a izakaya or sushi restaurant. The Dotonbori area has everything within walking distance.<br><b>Rain:</b> Shinsekai has some covered arcades — still doable in light rain. Heavy rain, skip and head to Umeda underground.</div>
+    </details>
+  </div>
+
+  <div class="move-conn"><div class="move-vline"></div><div class="move-info">🚇 <strong>Shinsekai → Umeda:</strong> Osaka Metro Yotsubashi Line · Daikokucho → Namba → Hommachi → Nishi-Umeda (~20 min, ¥280) · Walk 10 min to Umeda Sky Building · Total ~30–35 min</div></div>
+
+  <div class="stop even fi">
+    <div class="stop-meta">
+      <span class="stop-time">20:00</span>
+      <span class="stag cost">💴 ¥1,500</span>
+    </div>
+    <div class="stop-name"><a href="https://maps.google.com/?q=Umeda+Sky+Building+Osaka" target="_blank" rel="noopener">Umeda Sky Building</a> or Dotonbori night</div>
+    <div class="stop-tags">
+      <span class="stag dur">⏱ ~60 min</span>
+      <span class="stag cost">💴 ¥1,500 + transport</span>
+    </div>
+    <p class="stop-what">Night view from the open-air 40th floor (last entry 22:00) — 360° rooftop with Osaka city lights. Or stay in Dotonbori for neon nightlife photos instead.</p>
+    <div class="pro-tip">💡 <strong>Pro Tip:</strong> Umeda Sky Building opens until 22:30 (last entry 22:00). The rooftop is open-air — bring a light jacket. The connecting escalator tunnel between the two towers is architecturally unique. Arriving at 20:00 gives you the full nighttime view. The Dotonbori alternative at night has incredible neon reflections on the canal — best around 21:00 when the photo crowds thin out.</div>
+    <details class="backup">
+      <summary>⚡ Backup if crowded / rainy</summary>
+      <div class="backup-body"><b>Bad weather:</b> Umeda underground city (Daimaru, Lucua) and Hep Five Ferris wheel (¥600, indoor ride at 106m) are covered alternatives.<br><b>Too tired:</b> Skip Umeda entirely and enjoy Dotonbori night photos instead — free and very photogenic.</div>
+    </details>
+  </div>
+
+  <!-- Food Options -->
+  <div class="sec-hdr fi">🍽️ Food Options</div>
+
+  <div class="food-card fi">
+    <div class="food-cat" style="color:var(--morn)">Market Food</div>
+    <div class="food-row"><span class="food-lbl">Main:</span><span class="food-val"><a href="https://maps.google.com/?q=Kuromon+Market+Osaka" target="_blank">Kuromon Market</a></span></div>
+    <div class="food-row"><span class="food-lbl">Backup 1:</span><span class="food-val">Namba casual sushi counters</span></div>
+    <div class="food-row"><span class="food-lbl">Backup 2:</span><span class="food-val">Food court in Namba City / department store</span></div>
+    <div class="food-why">Kuromon is the easiest way to sample Osaka food in one concentrated area. Bring cash.</div>
+  </div>
+
+  <div class="food-card fi">
+    <div class="food-cat" style="color:var(--aftn)">Okonomiyaki</div>
+    <div class="food-row"><span class="food-lbl">Main:</span><span class="food-val"><a href="https://maps.google.com/?q=Okonomiyaki+Mizuno+Dotonbori" target="_blank">Okonomiyaki Mizuno</a></span></div>
+    <div class="food-row"><span class="food-lbl">Backup 1:</span><span class="food-val">Chibo / other Dotonbori okonomiyaki</span></div>
+    <div class="food-row"><span class="food-lbl">Backup 2:</span><span class="food-val"><a href="https://maps.google.com/?q=Dotonbori+Imai+Osaka" target="_blank">Dotonbori Imai</a> (udon)</span></div>
+    <div class="food-why">Osaka's signature food. Imai is calmer and more local-feeling if Mizuno has a long line.</div>
+  </div>
+
+  <div class="food-card fi">
+    <div class="food-cat" style="color:var(--osa)">Takoyaki</div>
+    <div class="food-row"><span class="food-lbl">Main:</span><span class="food-val"><a href="https://maps.google.com/?q=Takoya+Dotonbori+Kukuru" target="_blank">Takoya Dotonbori Kukuru</a></span></div>
+    <div class="food-row"><span class="food-lbl">Backup 1:</span><span class="food-val">Other Dotonbori takoyaki stands (Aizu, Wanaka)</span></div>
+    <div class="food-row"><span class="food-lbl">Backup 2:</span><span class="food-val">Convenience store takoyaki (surprisingly good)</span></div>
+    <div class="food-why">Fast, iconic, and cheap. Kukuru's melting center is what separates them from regular takoyaki.</div>
+  </div>
+
+  <div class="food-card fi">
+    <div class="food-cat" style="color:var(--even)">Kushikatsu</div>
+    <div class="food-row"><span class="food-lbl">Main:</span><span class="food-val"><a href="https://maps.google.com/?q=Kushikatsu+Daruma+Shinsekai" target="_blank">Kushikatsu Daruma</a></span></div>
+    <div class="food-row"><span class="food-lbl">Backup 1:</span><span class="food-val">Other Shinsekai kushikatsu (Yaekatsu)</span></div>
+    <div class="food-row"><span class="food-lbl">Backup 2:</span><span class="food-val">Dotonbori izakaya with kushikatsu menu</span></div>
+    <div class="food-why">Best dinner after the Shinsekai walk. The retro atmosphere of Shinsekai adds to the experience.</div>
+  </div>
+
+  <div class="food-card fi">
+    <div class="food-cat" style="color:#EC4899">Dessert / Souvenir</div>
+    <div class="food-row"><span class="food-lbl">Main:</span><span class="food-val"><a href="https://maps.google.com/?q=Rikuro+Ojisan+Cheesecake+Namba" target="_blank">Rikuro Ojisan Cheesecake</a> (~¥935/whole)</span></div>
+    <div class="food-row"><span class="food-lbl">Backup 1:</span><span class="food-val">Namba/Dotonbori cafes</span></div>
+    <div class="food-row"><span class="food-lbl">Backup 2:</span><span class="food-val">Convenience store sweets</span></div>
+    <div class="food-why">The jiggly fresh-baked cheesecake is stamped with a dog mark and best eaten warm — a uniquely Osaka dessert experience.</div>
+  </div>
+
+  <!-- Flexible Alternatives -->
+  <div class="sec-hdr fi">⚡ Flexible Alternatives</div>
+
+  <details class="alt-card fi" data-types="rainy">
+    <summary><span class="alt-scenario sc-rainy">🌧️ Rainy Day</span></summary>
+    <div class="alt-body"><b>Switch to:</b> <a href="https://maps.google.com/?q=Osaka+Castle+Museum" target="_blank">Osaka Castle Museum</a> (indoor) → Kuromon Market (partially covered) → Namba covered arcades → Umeda underground city / <a href="https://maps.google.com/?q=Umeda+Sky+Building+Osaka" target="_blank">Umeda Sky Building</a><br><b>Reason:</b> Keeps most of the day indoors or under cover. Umeda underground is one of the largest underground shopping areas in Japan — dry and extensive.</div>
+  </details>
+
+  <details class="alt-card fi" data-types="crowd">
+    <summary><span class="alt-scenario sc-crowd">😤 Very Crowded Dotonbori</span></summary>
+    <div class="alt-body"><b>Switch to:</b> Take Glico sign photos from the bridge at 16:30 (pre-dinner, fewer people) OR go back at 21:30–22:00 (post-dinner, calmer).<br><b>Reason:</b> Crowds and restaurant lines peak 17:00–20:00 around Dotonbori. Eat before 17:00 or after 20:30 for noticeably shorter waits.</div>
+  </details>
+
+  <details class="alt-card fi" data-types="tired">
+    <summary><span class="alt-scenario sc-tired">😴 Too Tired</span></summary>
+    <div class="alt-body"><b>Switch to:</b> Kuromon Market → Namba → <a href="https://maps.google.com/?q=Dotonbori+Osaka" target="_blank">Dotonbori</a> only.<br><b>Reason:</b> This trio has the best food density with minimal transport. All three are within 15 min walk of each other. Skip Osaka Castle and Shinsekai for a more relaxed pace.</div>
+  </details>
+
+  <details class="alt-card fi" data-types="food">
+    <summary><span class="alt-scenario sc-food">🍜 Food-First Traveler</span></summary>
+    <div class="alt-body"><b>Switch to:</b> Kuromon → Mizuno → Kukuru → Rikuro → Daruma — a complete Osaka food crawl.<br><b>Reason:</b> Turns the entire day into a curated food tour. This route covers market food, the two iconic Osaka dishes (okonomiyaki + kushikatsu), takoyaki, and dessert. Skip sightseeing entirely and just eat.</div>
+  </details>
+
+  <details class="alt-card fi" data-types="family">
+    <summary><span class="alt-scenario sc-family">👨‍👩‍👧 Family / Rainy Alternative</span></summary>
+    <div class="alt-body"><b>Switch to:</b> Add <a href="https://maps.google.com/?q=Osaka+Aquarium+Kaiyukan" target="_blank">Osaka Aquarium Kaiyukan</a> (¥2,400 adults / ¥1,200 children, 2–3h) and reduce nightlife stops.<br><b>Reason:</b> One of the world's best aquariums — whale shark tank is the centerpiece. Near Osaka Castle by metro (~30 min). Reduce Shinsekai/Umeda to fit it in.</div>
+  </details>
+
+  <!-- Day Budget -->
+  <div class="budget-box fi">
+    <h3>📊 Day Budget Estimate (per person)</h3>
+    <div class="budget-row"><span class="cat">Osaka Castle (tower optional)</span><span class="amt">Free–¥600</span></div>
+    <div class="budget-row"><span class="cat">Kuromon Market snacks</span><span class="amt">¥500–1,500</span></div>
+    <div class="budget-row"><span class="cat">Lunch (Okonomiyaki / Udon)</span><span class="amt">¥1,200–1,600</span></div>
+    <div class="budget-row"><span class="cat">Takoyaki + Rikuro</span><span class="amt">¥500–1,800</span></div>
+    <div class="budget-row"><span class="cat">Kushikatsu Daruma dinner</span><span class="amt">¥1,500–2,000</span></div>
+    <div class="budget-row"><span class="cat">Umeda Sky Building (optional)</span><span class="amt">¥1,500</span></div>
+    <div class="budget-row"><span class="cat">Transport (IC Card / Metro)</span><span class="amt">¥600–1,000</span></div>
+    <div class="budget-total"><span class="lbl">Day Total</span><span class="val">¥5,800–9,000</span></div>
+    <div class="budget-note">* Budget route (skip tower + Sky Building): ¥3,300–5,000</div>
+  </div>
+
+  <div class="imp-note fi"><strong>⚠️ Osaka Tip:</strong> Osaka is strongest at night and food. Do not over-schedule the daytime — keep energy for the Dotonbori / Shinsekai evening. The Kushikatsu no double-dipping rule is enforced in every restaurant: never dip twice.</div>
+</section>
+
+</div><!-- /container -->
+
+<script>
+// ── CITY TABS ──
+document.querySelectorAll('.ctab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const city = btn.dataset.city;
+    document.querySelectorAll('.ctab').forEach(b => b.classList.toggle('active', b === btn));
+    document.querySelectorAll('.city-sec').forEach(s => s.classList.toggle('active', s.id === city));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    initAnim();
+  });
+});
+
+// ── TRAVELER TYPE ──
+document.querySelectorAll('.ttype').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.ttype').forEach(b => b.classList.toggle('active', b === btn));
+    const t = btn.dataset.type;
+    document.body.className = t === 'all' ? '' : 'filter-' + t;
+  });
+});
+
+// ── SCROLL ANIMATIONS ──
+function initAnim() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); obs.unobserve(e.target); }});
+  }, { threshold: 0.05, rootMargin: '0px 0px -16px 0px' });
+  document.querySelectorAll('.fi:not(.on)').forEach(el => obs.observe(el));
+}
+
+document.addEventListener('DOMContentLoaded', initAnim);
+</script>
+</body>
+</html>
