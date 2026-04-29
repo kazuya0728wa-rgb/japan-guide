@@ -9,7 +9,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -230,20 +229,7 @@
     .warn-box strong { color: var(--purple); }
 
     /* ── FOOTER / QR ── */
-    .footer-box {
-      text-align: center; padding: 32px 20px;
-      background: #fff; border-radius: 20px; border: 1px solid var(--border);
-      margin-bottom: 24px;
-    }
-    .footer-box h3  { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
-    .footer-box > p { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
-    #qrcode {
-      display: inline-block; padding: 12px;
-      background: #fff; border-radius: 12px; border: 1px solid var(--border);
-      margin-bottom: 12px;
-    }
-    .site-url { font-size: 13px; font-weight: 600; word-break: break-all; color: var(--text); }
-    .credits { font-size: 11px; color: var(--muted); margin-top: 16px; line-height: 1.7; }
+    .credits { font-size: 11px; color: var(--muted); margin-top: 16px; line-height: 1.7; text-align: center; }
 
     /* ── CITY SECTION ── */
     .city-sec { margin-bottom: 44px; }
@@ -524,16 +510,9 @@
   </div>
 
 
-  <!-- ═══════ FOOTER / QR ═══════ -->
-  <div class="footer-box fi">
-    <h3 data-i18n="qr_title">Share this guide</h3>
-    <p data-i18n="qr_sub">Scan the QR code to open on your phone</p>
-    <div id="qrcode"></div>
-    <div class="site-url" id="site-url">kazuya0728wa-rgb.github.io/japan-guide/</div>
-    <div class="credits">
-      This guide is for informational purposes only.<br>
-      Always verify info before visiting · Free to share
-    </div>
+  <div class="credits">
+    This guide is for informational purposes only.<br>
+    Always verify info before visiting · Free to share
   </div>
 
 </div><!-- /container -->
@@ -565,7 +544,6 @@ const T = {
     t4h:"Google Translate",t4b:"Download with Japanese offline. The camera mode reads menus in real time — incredibly useful.",
     t5h:"Convenience Stores",t5b:"7-Eleven, Lawson, FamilyMart sell great food: onigiri, hot meals, desserts. Perfect for breakfast or a quick snack.",
     bfr_title:"Before You Go",bfr_body:"Opening hours, holidays, prices, and crowds can change. Always check <strong>Google Maps</strong> or the official website before you go. <strong>teamLab Planets</strong> and popular spots require advance booking.",
-    qr_title:"Share this guide",qr_sub:"Scan the QR code to open on your phone",
   },
   fr: {
     how_title:"COMMENT UTILISER CE GUIDE",
@@ -589,7 +567,6 @@ const T = {
     t4h:"Google Traduction",t4b:"Téléchargez le japonais hors ligne. La caméra peut lire les menus japonais en temps réel — très pratique.",
     t5h:"Convenience stores (コンビニ)",t5b:"7-Eleven, Lawson, FamilyMart vendent d'excellents repas : onigiri, plats chauds, desserts. Parfait pour le petit-déjeuner.",
     bfr_title:"Avant de partir",bfr_body:"Les horaires, prix et affluence peuvent changer. Vérifiez toujours <strong>Google Maps</strong> ou le site officiel. <strong>teamLab Planets</strong> et les sites populaires nécessitent une réservation à l'avance.",
-    qr_title:"Partagez ce guide",qr_sub:"Scannez le QR code pour l'ouvrir sur votre téléphone",
   },
   de: {
     how_title:"SO NUTZEN SIE DIESEN GUIDE",
@@ -613,7 +590,6 @@ const T = {
     t4h:"Google Übersetzer",t4b:"Japanisch für Offline herunterladen. Die Kamerafunktion liest japanische Menüs in Echtzeit.",
     t5h:"Convenience Stores",t5b:"7-Eleven, Lawson, FamilyMart bieten ausgezeichnetes Essen: Onigiri, warme Mahlzeiten, Desserts. Ideal für das Frühstück.",
     bfr_title:"Vor der Reise",bfr_body:"Öffnungszeiten, Preise und Besucherzahlen können sich ändern. Prüfen Sie immer <strong>Google Maps</strong> oder die offizielle Website. <strong>teamLab Planets</strong> und beliebte Orte erfordern eine Voranmeldung.",
-    qr_title:"Guide teilen",qr_sub:"QR-Code scannen, um auf dem Handy zu öffnen",
   },
   es: {
     how_title:"CÓMO USAR ESTA GUÍA",
@@ -637,7 +613,6 @@ const T = {
     t4h:"Google Translate",t4b:"Descarga el japonés sin conexión. La cámara lee menús japoneses en tiempo real — muy útil.",
     t5h:"Tiendas de conveniencia",t5b:"7-Eleven, Lawson, FamilyMart venden comida excelente: onigiri, platos calientes, postres. Perfecto para el desayuno.",
     bfr_title:"Antes de ir",bfr_body:"Los horarios, precios y afluencia pueden cambiar. Consulta siempre <strong>Google Maps</strong> o la web oficial. <strong>teamLab Planets</strong> y los lugares populares requieren reserva anticipada.",
-    qr_title:"Comparte esta guía",qr_sub:"Escanea el código QR para abrirlo en tu móvil",
   },
   it: {
     how_title:"COME USARE QUESTA GUIDA",
@@ -661,7 +636,6 @@ const T = {
     t4h:"Google Translate",t4b:"Scarica il giapponese offline. La fotocamera legge i menu giapponesi in tempo reale — utilissimo.",
     t5h:"Convenience Store (コンビニ)",t5b:"7-Eleven, Lawson, FamilyMart vendono ottimo cibo: onigiri, pasti caldi, dessert. Perfetti per la colazione.",
     bfr_title:"Prima di partire",bfr_body:"Orari, prezzi e affollamento possono variare. Controlla sempre <strong>Google Maps</strong> o il sito ufficiale. <strong>teamLab Planets</strong> e i luoghi famosi richiedono prenotazione anticipata.",
-    qr_title:"Condividi questa guida",qr_sub:"Scansiona il QR code per aprirla sul telefono",
   }
 };
 
@@ -683,22 +657,6 @@ function setLang(l) {
 }
 
 // ══════════════════════════════════════
-//  QR CODE
-// ══════════════════════════════════════
-function initQR() {
-  const isLocal = location.hostname === '' || location.hostname === 'localhost' || location.protocol === 'file:';
-  const url = isLocal ? 'https://kazuya0728wa-rgb.github.io/japan-guide/' : location.href.split('?')[0];
-  document.getElementById('site-url').textContent = url;
-  try {
-    new QRCode(document.getElementById('qrcode'), {
-      text: url, width: 140, height: 140,
-      colorDark: '#111827', colorLight: '#ffffff',
-      correctLevel: QRCode.CorrectLevel.M
-    });
-  } catch(e) { document.getElementById('qrcode').innerHTML = '<p style="font-size:12px;color:#6B7280">'+url+'</p>'; }
-}
-
-// ══════════════════════════════════════
 //  SCROLL FADE-IN
 // ══════════════════════════════════════
 function initAnim() {
@@ -713,7 +671,6 @@ function initAnim() {
 // ══════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
   setLang(lang);
-  initQR();
   initAnim();
 });
 </script>
