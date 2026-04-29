@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Free Japan mini guide for tourists — Tokyo, Kyoto, Osaka. Food, sightseeing, practical tips. Available in 5 languages.">
+  <meta name="theme-color" content="#111827">
+  <title>Free Japan Guide – Tokyo / Kyoto / Osaka</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --tokyo:       #2563EB;
+      --tokyo-dark:  #1D4ED8;
+      --tokyo-light: #EFF6FF;
+      --kyoto:       #16A34A;
+      --kyoto-dark:  #15803D;
+      --kyoto-light: #F0FDF4;
+      --osaka:       #EA580C;
+      --osaka-dark:  #C2410C;
+      --osaka-light: #FFF7ED;
+      --purple:      #7C3AED;
+      --purple-light:#F5F3FF;
+      --bg:    #F9FAFB;
+      --text:  #111827;
+      --muted: #6B7280;
+      --card:  #FFFFFF;
+      --border:#E5E7EB;
+      --r:     16px;
+      --sh:    0 1px 3px rgba(0,0,0,.07), 0 4px 12px rgba(0,0,0,.05);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter','Noto Sans',system-ui,sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── LANG BAR ── */
+    .lang-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,.96);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 9px 16px;
+      display: flex; justify-content: center; gap: 6px; flex-wrap: wrap;
+    }
+    .lang-btn {
+      padding: 5px 14px;
+      border-radius: 999px;
+      border: 1.5px solid var(--border);
+      background: transparent;
+      font-size: 13px; font-weight: 500;
+      cursor: pointer; color: var(--muted);
+      transition: all .15s;
+      font-family: inherit;
+    }
+    .lang-btn:hover { border-color: #9CA3AF; color: var(--text); }
+    .lang-btn.active { background: var(--text); border-color: var(--text); color: #fff; }
+
+    /* ── LAYOUT ── */
+    .container { max-width: 480px; margin: 0 auto; padding: 0 16px 48px; }
+
+    /* ── GUIDE HERO ── */
+    .guide-hero { text-align: center; padding: 36px 0 20px; }
+    .badge {
+      display: inline-block;
+      background: var(--purple-light); color: var(--purple);
+      padding: 4px 14px; border-radius: 999px;
+      font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .guide-hero h1 {
+      font-size: clamp(28px,7vw,38px); font-weight: 900;
+      letter-spacing: -.025em; line-height: 1.1; margin-bottom: 6px;
+    }
+    .guide-hero .subtitle { color: var(--muted); font-size: 14px; margin-bottom: 0; }
+
+    /* ── HOW-TO CARD ── */
+    .how-card {
+      background: var(--purple-light);
+      border: 1.5px solid #DDD6FE;
+      border-left: 4px solid var(--purple);
+      border-radius: var(--r);
+      padding: 16px 20px;
+      margin: 20px 0 24px;
+    }
+    .how-card h2 { font-size: 13px; font-weight: 700; color: var(--purple); margin-bottom: 5px; text-transform: uppercase; letter-spacing: .06em; }
+    .how-card p  { font-size: 14px; color: #374151; line-height: 1.65; }
+
+    /* ── CITY NAV ── */
+    .city-nav {
+      display: flex; gap: 8px; margin-bottom: 32px;
+      overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 2px;
+    }
+    .city-nav::-webkit-scrollbar { display: none; }
+    .city-nav a {
+      flex: 1; min-width: 100px; text-align: center; text-decoration: none;
+      padding: 11px 16px; border-radius: 14px;
+      font-size: 13px; font-weight: 700; letter-spacing: .02em; transition: all .15s;
+    }
+    .city-nav a.tok { background: var(--tokyo-light);  color: var(--tokyo); }
+    .city-nav a.kyo { background: var(--kyoto-light);  color: var(--kyoto); }
+    .city-nav a.osa { background: var(--osaka-light);  color: var(--osaka); }
+    .city-nav a:hover { transform: translateY(-2px); box-shadow: var(--sh); }
+
+    /* ── CITY HEADER ── */
+    .city-hdr {
+      border-radius: 22px; padding: 32px 24px; margin-bottom: 14px;
+      position: relative; overflow: hidden;
+    }
+    .city-hdr.tok { background: linear-gradient(135deg,#1E3A8A 0%,#2563EB 55%,#60A5FA 100%); }
+    .city-hdr.kyo { background: linear-gradient(135deg,#14532D 0%,#16A34A 55%,#4ADE80 100%); }
+    .city-hdr.osa { background: linear-gradient(135deg,#7C2D12 0%,#EA580C 55%,#FB923C 100%); }
+    .city-hdr::before {
+      content:''; position:absolute; top:-40px; right:-40px;
+      width:180px; height:180px; border-radius:50%; background:rgba(255,255,255,.07);
+    }
+    .city-hdr::after {
+      content:''; position:absolute; bottom:-50px; left:-25px;
+      width:140px; height:140px; border-radius:50%; background:rgba(255,255,255,.04);
+    }
+    .city-hdr h2 {
+      color:#fff; font-size:34px; font-weight:900; letter-spacing:-.03em; margin-bottom:5px;
+      position:relative; z-index:1;
+    }
+    .city-hdr p   { color:rgba(255,255,255,.85); font-size:14px; position:relative; z-index:1; }
+    .city-hdr .em { position:absolute; right:24px; top:50%; transform:translateY(-50%); font-size:54px; opacity:.5; z-index:1; }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--r);
+      padding: 18px 20px; margin-bottom: 12px; box-shadow: var(--sh);
+    }
+    .card.bordered-tok { border-left: 4px solid var(--tokyo);  }
+    .card.bordered-kyo { border-left: 4px solid var(--kyoto);  }
+    .card.bordered-osa { border-left: 4px solid var(--osaka);  }
+
+    .card-lbl {
+      font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .card-lbl.tok { color: var(--tokyo); }
+    .card-lbl.kyo { color: var(--kyoto); }
+    .card-lbl.osa { color: var(--osaka); }
+    .card-lbl.gray { color: var(--muted); }
+
+    /* ── FOOD LIST ── */
+    .food-list { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+    .food-item { display: flex; gap: 11px; align-items: flex-start; }
+    .f-icon {
+      width: 34px; height: 34px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px; flex-shrink: 0;
+    }
+    .f-icon.tok { background: var(--tokyo-light); }
+    .f-icon.kyo { background: var(--kyoto-light); }
+    .f-icon.osa { background: var(--osaka-light); }
+    .f-name { font-weight: 600; font-size: 14px; line-height: 1.3; }
+    .f-desc { font-size: 12px; color: var(--muted); line-height: 1.45; margin-top: 2px; }
+
+    /* ── SIGHT LIST ── */
+    .sight-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+    .sight-item { display: flex; gap: 11px; align-items: flex-start; }
+    .s-meta { display: flex; align-items: center; gap: 6px; margin-top: 5px; flex-wrap: wrap; }
+    .fee {
+      display: inline-block; font-size: 11px; font-weight: 600;
+      padding: 2px 8px; border-radius: 999px;
+    }
+    .fee.free { background: #DCFCE7; color: #15803D; }
+    .fee.paid { background: #FEF9C3; color: #854D0E; }
+    .fee.book { background: #FEE2E2; color: #B91C1C; }
+    .map-a {
+      display: inline-flex; align-items: center; gap: 3px;
+      font-size: 11px; font-weight: 500; text-decoration: none; margin-top: 0;
+    }
+    .map-a.tok { color: var(--tokyo); }
+    .map-a.kyo { color: var(--kyoto); }
+    .map-a.osa { color: var(--osaka); }
+    .map-a:hover { text-decoration: underline; }
+
+    /* ── ROUTE ── */
+    .route-txt { font-size: 14px; line-height: 1.7; color: #374151; margin-bottom: 12px; }
+    .route-links { display: flex; flex-direction: column; gap: 7px; }
+    .route-a {
+      display: flex; align-items: center; gap: 8px;
+      text-decoration: none; padding: 9px 13px; border-radius: 11px;
+      font-size: 13px; font-weight: 500; transition: all .15s;
+    }
+    .route-a.tok { background: var(--tokyo-light); color: var(--tokyo-dark); }
+    .route-a.kyo { background: var(--kyoto-light); color: var(--kyoto-dark); }
+    .route-a.osa { background: var(--osaka-light); color: var(--osaka-dark); }
+    .route-a:hover { filter: brightness(.95); transform: translateX(3px); }
+    .route-a .arr { margin-left: auto; opacity: .55; }
+
+    /* ── TIPS ── */
+    .tip-row {
+      display: flex; gap: 13px; align-items: flex-start;
+      padding: 13px 0; border-bottom: 1px solid var(--border);
+    }
+    .tip-row:first-of-type { padding-top: 0; }
+    .tip-row:last-of-type  { border-bottom: none; padding-bottom: 0; }
+    .tip-ico {
+      width: 40px; height: 40px; border-radius: 11px; background: #F3F4F6;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 19px; flex-shrink: 0;
+    }
+    .tip-ttl { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+    .tip-bdy { font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+    /* ── BEFORE YOU GO ── */
+    .before-box {
+      background: var(--purple-light); border: 1.5px solid #DDD6FE;
+      border-radius: 20px; padding: 24px 20px; margin-bottom: 36px;
+    }
+    .before-box h2   { font-size: 20px; font-weight: 800; color: var(--purple); margin-bottom: 3px; }
+    .before-box .sub { font-size: 13px; color: #8B5CF6; margin-bottom: 14px; }
+    .warn-box {
+      background: #fff; border-radius: 12px; padding: 14px 16px;
+      font-size: 13px; line-height: 1.65; color: #374151;
+      border: 1px solid #DDD6FE;
+    }
+    .warn-box strong { color: var(--purple); }
+
+    /* ── FOOTER / QR ── */
+    .footer-box {
+      text-align: center; padding: 32px 20px;
+      background: #fff; border-radius: 20px; border: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+    .footer-box h3  { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+    .footer-box > p { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
+    #qrcode {
+      display: inline-block; padding: 12px;
+      background: #fff; border-radius: 12px; border: 1px solid var(--border);
+      margin-bottom: 12px;
+    }
+    .site-url { font-size: 13px; font-weight: 600; word-break: break-all; color: var(--text); }
+    .credits { font-size: 11px; color: var(--muted); margin-top: 16px; line-height: 1.7; }
+
+    /* ── CITY SECTION ── */
+    .city-sec { margin-bottom: 44px; }
+
+    /* ── FADE IN ── */
+    .fi { opacity: 0; transform: translateY(18px); transition: opacity .45s ease, transform .45s ease; }
+    .fi.on { opacity: 1; transform: none; }
+
+    @media (min-width: 520px) { .container { padding: 0 24px 56px; } }
+  </style>
+</head>
+<body>
+
+<!-- Language Bar -->
+<nav class="lang-bar" aria-label="Language selector">
+  <button class="lang-btn active" data-lang="en" onclick="setLang('en')">🇬🇧 EN</button>
+  <button class="lang-btn" data-lang="fr" onclick="setLang('fr')">🇫🇷 FR</button>
+  <button class="lang-btn" data-lang="de" onclick="setLang('de')">🇩🇪 DE</button>
+  <button class="lang-btn" data-lang="es" onclick="setLang('es')">🇪🇸 ES</button>
+  <button class="lang-btn" data-lang="it" onclick="setLang('it')">🇮🇹 IT</button>
+</nav>
+
+<div class="container">
+
+  <!-- Hero -->
+  <div class="guide-hero fi">
+    <div class="badge">FREE GUIDE</div>
+    <h1>🗾 Japan Mini Guide</h1>
+    <p class="subtitle">Tokyo · Kyoto · Osaka</p>
+  </div>
+
+  <!-- How to use -->
+  <div class="how-card fi">
+    <h2 data-i18n="how_title">HOW TO USE</h2>
+    <p data-i18n="how_body">Pick one city, choose 2–3 sightseeing spots, and add 1–2 food areas. Keep enough time for breaks and transfers.</p>
+  </div>
+
+  <!-- City Nav -->
+  <div class="city-nav fi">
+    <a href="#tokyo" class="tok">🗼 TOKYO</a>
+    <a href="#kyoto" class="kyo">⛩️ KYOTO</a>
+    <a href="#osaka" class="osa">🏯 OSAKA</a>
+  </div>
+
+
+  <!-- ═══════ TOKYO ═══════ -->
+  <section id="tokyo" class="city-sec">
+    <div class="city-hdr tok fi">
+      <h2>TOKYO</h2>
+      <p data-i18n="tok_ovr">Modern city, temples, shopping, seafood, nightlife.</p>
+      <span class="em">🗼</span>
+    </div>
+
+    <!-- Route -->
+    <div class="card bordered-tok fi">
+      <div class="card-lbl tok" data-i18n="lbl_route">ROUTE</div>
+      <p class="route-txt" data-i18n="tok_route">Morning: Tsukiji → Afternoon: Asakusa &amp; Sensoji → Evening: Shibuya or Shinjuku. Add 10–15 min for big station transfers.</p>
+      <div class="route-links">
+        <a class="route-a tok" href="https://maps.google.com/?q=Tsukiji+Outer+Market+Tokyo" target="_blank" rel="noopener">📍 Tsukiji Outer Market <span class="arr">→</span></a>
+        <a class="route-a tok" href="https://maps.google.com/?q=Sensoji+Temple+Asakusa+Tokyo" target="_blank" rel="noopener">📍 Sensoji Temple <span class="arr">→</span></a>
+        <a class="route-a tok" href="https://maps.google.com/?q=Meiji+Jingu+Shrine+Tokyo" target="_blank" rel="noopener">📍 Meiji Jingu Shrine <span class="arr">→</span></a>
+        <a class="route-a tok" href="https://maps.google.com/?q=Shibuya+Crossing+Tokyo" target="_blank" rel="noopener">📍 Shibuya Crossing <span class="arr">→</span></a>
+        <a class="route-a tok" href="https://maps.google.com/?q=teamLab+Planets+Toyosu+Tokyo" target="_blank" rel="noopener">📍 teamLab Planets <span class="arr">→</span></a>
+      </div>
+    </div>
+
+    <!-- Food -->
+    <div class="card bordered-tok fi">
+      <div class="card-lbl tok" data-i18n="lbl_food">FOOD</div>
+      <ul class="food-list">
+        <li class="food-item"><div class="f-icon tok">🦐</div><div><div class="f-name">Tsukiji Outer Market</div><div class="f-desc" data-i18n="tf1">Seafood, sushi, seafood bowls, tamagoyaki</div></div></li>
+        <li class="food-item"><div class="f-icon tok">🍡</div><div><div class="f-name">Asakusa / Nakamise</div><div class="f-desc" data-i18n="tf2">Traditional snacks, ningyo-yaki, senbei, matcha sweets</div></div></li>
+        <li class="food-item"><div class="f-icon tok">🍜</div><div><div class="f-name">Shinjuku</div><div class="f-desc" data-i18n="tf3">Ramen, yakitori, izakaya</div></div></li>
+        <li class="food-item"><div class="f-icon tok">🥐</div><div><div class="f-name">Shibuya / Harajuku</div><div class="f-desc" data-i18n="tf4">Cafes, crepes, casual food</div></div></li>
+        <li class="food-item"><div class="f-icon tok">🍣</div><div><div class="f-name">Ginza / Tokyo Station</div><div class="f-desc" data-i18n="tf5">Sushi, tempura, desserts</div></div></li>
+      </ul>
+    </div>
+
+    <!-- Sightseeing -->
+    <div class="card bordered-tok fi">
+      <div class="card-lbl tok" data-i18n="lbl_sight">SIGHTSEEING</div>
+      <ul class="sight-list">
+        <li class="sight-item">
+          <div class="f-icon tok">⛩️</div>
+          <div><div class="f-name">Sensoji Temple</div><div class="f-desc" data-i18n="ts1">Traditional Tokyo, Kaminarimon gate</div>
+            <div class="s-meta"><span class="fee free">Free</span><a class="map-a tok" href="https://maps.google.com/?q=Sensoji+Temple+Asakusa" target="_blank" rel="noopener">🗺 Maps</a></div></div>
+        </li>
+        <li class="sight-item">
+          <div class="f-icon tok">🌿</div>
+          <div><div class="f-name">Meiji Jingu Shrine</div><div class="f-desc" data-i18n="ts2">Peaceful forest shrine</div>
+            <div class="s-meta"><span class="fee free">Free</span><a class="map-a tok" href="https://maps.google.com/?q=Meiji+Jingu+Shrine+Tokyo" target="_blank" rel="noopener">🗺 Maps</a></div></div>
+        </li>
+        <li class="sight-item">
+          <div class="f-icon tok">🚦</div>
+          <div><div class="f-name">Shibuya Crossing</div><div class="f-desc" data-i18n="ts3">Classic Tokyo photo spot</div>
+            <div class="s-meta"><span class="fee free">Free</span><a class="map-a tok" href="https://maps.google.com/?q=Shibuya+Crossing+Tokyo" target="_blank" rel="noopener">🗺 Maps</a></div></div>
+        </li>
+        <li class="sight-item">
+          <div class="f-icon tok">🗼</div>
+          <div><div class="f-name">Tokyo Skytree</div><div class="f-desc" data-i18n="ts4">City view from the tallest tower</div>
+            <div class="s-meta"><span class="fee paid">~¥2,080+</span><a class="map-a tok" href="https://maps.google.com/?q=Tokyo+Skytree" target="_blank" rel="noopener">🗺 Maps</a></div></div>
+        </li>
+        <li class="sight-item">
+          <div class="f-icon tok">🎨</div>
+          <div><div class="f-name">teamLab Planets / Toyosu</div><div class="f-desc" data-i18n="ts5">Digital art &amp; waterfront</div>
+            <div class="s-meta"><span class="fee book">⚠️ Book ahead</span><a class="map-a tok" href="https://maps.google.com/?q=teamLab+Planets+Toyosu" target="_blank" rel="noopener">🗺 Maps</a></div></div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+
+  <!-- ═══════ KYOTO ═══════ -->
+  <section id="kyoto" class="city-sec">
+    <div class="city-hdr kyo fi">
+      <h2>KYOTO</h2>
+      <p data-i18n="kyo_ovr">Temples, shrines, traditional streets, matcha, nature.</p>
+      <span class="em">⛩️</span>
+    </div>
+
+    <!-- Route -->
+    <div class="card bordered-kyo fi">
+      <div class="card-lbl kyo" data-i18n="lbl_route">ROUTE</div>
+      <p class="route-txt" data-i18n="kyo_route">Morning: Fushimi Inari → Afternoon: Kiyomizu-dera &amp; Ninenzaka → Evening: Gion or Pontocho.</p>
+      <div class="route-links">
+        <a class="route-a kyo" href="https://maps.google.com/?q=Fushimi+Inari+Taisha+Kyoto" target="_blank" rel="noopener">📍 Fushimi Inari <span class="arr">→</span></a>
+        <a class="route-a kyo" href="https://maps.google.com/?q=Kiyomizu-dera+Temple+Kyoto" target="_blank" rel="noopener">📍 Kiyomizu-dera <span class="arr">→</span></a>
+        <a class="route-a kyo" href="https://maps.google.com/?q=Nishiki+Market+Kyoto" target="_blank" rel="noopener">📍 Nishiki Market <span class="arr">→</span></a>
+        <a class="route-a kyo" href="https://maps.google.com/?q=Gion+District+Kyoto" target="_blank" rel="noopener">📍 Gion District <span class="arr">→</span></a>
+        <a class="route-a kyo" href="https://maps.google.com/?q=Arashiyama+Bamboo+Grove+Kyoto" target="_blank" rel="noopener">📍 Arashiyama <span class="arr">→</span></a>
+      </div>
+    </div>
+
+    <!-- Food -->
+    <div class="card bordered-kyo fi">
+      <div class="card-lbl kyo" data-i18n="lbl_food">FOOD</div>
+      <ul class="food-list">
+        <li class="food-item"><div class="f-icon kyo">🛒</div><div><div class="f-name">Nishiki Market</div><div class="f-desc" data-i18n="kf1">Kyoto snacks, yuba, matcha sweets</div></div></li>
+        <li class="food-item"><div class="f-icon kyo">🍵</div><div><div class="f-name">Gion</div><div class="f-desc" data-i18n="kf2">Traditional restaurants, wagashi, matcha</div></div></li>
+        <li class="food-item"><div class="f-icon kyo">🏮</div><div><div class="f-name">Pontocho</div><div class="f-desc" data-i18n="kf3">Dinner atmosphere, izakaya</div></div></li>
+        <li class="food-item"><div class="f-icon kyo">🍜</div><div><div class="f-name">Arashiyama</div><div class="f-desc" data-i18n="kf4">Soba, tofu, sweets</div></div></li>
+        <li class="food-item"><div class="f-icon kyo">🍱</div><div><div class="f-name">Kyoto Station</div><div class="f-desc" data-i18n="kf5">Ramen, bento, casual dinner</div></div></li>
+      </ul>
+    </div>
+
+    <!-- Sightseeing -->
+    <div class="card bordered-kyo fi">
+      <div class="card-lbl kyo" data-i18n="lbl_sight">SIGHTSEEING</div>
+      <ul class="sight-list">
+        <li class="sight-item">
+          <div class="f-icon kyo">⛩️</div>
+          <div><div class="f-name">Fushimi Inari Taisha</div><div class="f-desc" data-i18n="ks1">Famous red torii gates — open 24/7</div>
+            <div class="s-meta"><span class="fee free">Free · 24h</span><a class="map-a kyo" href="https://maps.google.com/?q=Fushimi+Inari+Taisha+Kyoto" target="_blank" rel="noopener">🗺 Maps</a></div></div>
+        </li>
+        <li class="sight-item">
+          <div class="f-icon kyo">🏯</div>
+          <div><div class="f-name">Kiyomizu-dera Temple</div><div class="f-desc" data-i18n="ks2">Temple, old streets, city view</div>
+            <div class="s-meta"><span class="fee paid">~¥500</span><a class="map-a kyo" href="https://maps.google.com/?q=Kiyomizu-dera+Temple+Kyoto" target="_blank" rel="noopener">🗺 Maps</a></div></div>
+        </li>
+        <li class="sight-item">
+          <div class="f-icon kyo">🏮</div>
+          <div><div class="f-name">Gion / Yasaka Shrine</div><div class="f-desc" data-i18n="ks3">Historic streets and evening walk</div>
+            <div class="s-meta"><span class="fee free">Free</span><a class="map-a kyo" href="https://maps.google.com/?q=Gion+Kyoto" target="_blank" rel="noopener">🗺 Maps</a></div></div>
+        </li>
+        <li class="sight-item">
+          <div class="f-icon kyo">🎋</div>
+          <div><div class="f-name">Arashiyama Bamboo Grove</div><div class="f-desc" data-i18n="ks4">Nature and photos — open 24/7</div>
+            <div class="s-meta"><span class="fee free">Free · 24h</span><a class="map-a kyo" href="https://maps.google.com/?q=Arashiyama+Bamboo+Grove+Kyoto" target="_blank" rel="noopener">🗺 Maps</a></div></div>
+        </li>
+        <li class="sight-item">
+          <div class="f-icon kyo">✨</div>
+          <div><div class="f-name">Kinkaku-ji</div><div class="f-desc" data-i18n="ks5">Golden Pavilion and garden</div>
+            <div class="s-meta"><span class="fee paid">~¥500</span><a class="map-a kyo" href="https://maps.google.com/?q=Kinkakuji+Golden+Pavilion+Kyoto" target="_blank" rel="noopener">🗺 Maps</a></div></div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+
+  <!-- ═══════ OSAKA ═══════ -->
+  <section id="osaka" class="city-sec">
+    <div class="city-hdr osa fi">
+      <h2>OSAKA</h2>
+      <p data-i18n="osa_ovr">Street food, nightlife, casual local atmosphere.</p>
+      <span class="em">🏯</span>
+    </div>
+
+    <!-- Route -->
+    <div class="card bordered-osa fi">
+      <div class="card-lbl osa" data-i18n="lbl_route">ROUTE</div>
+      <p class="route-txt" data-i18n="osa_route">Morning: Osaka Castle → Afternoon: Kuromon Market &amp; Namba → Evening: Dotonbori &amp; Shinsekai.</p>
+      <div class="route-links">
+        <a class="route-a osa" href="https://maps.google.com/?q=Osaka+Castle" target="_blank" rel="noopener">📍 Osaka Castle <span class="arr">→</span></a>
+        <a class="route-a osa" href="https://maps.google.com/?q=Dotonbori+Osaka" target="_blank" rel="noopener">📍 Dotonbori <span class="arr">→</span></a>
+        <a class="route-a osa" href="https://maps.google.com/?q=Kuromon+Market+Osaka" target="_blank" rel="noopener">📍 Kuromon Market <span class="arr">→</span></a>
+        <a class="route-a osa" href="https://maps.google.com/?q=Shinsekai+Osaka" target="_blank" rel="noopener">📍 Shinsekai <span class="arr">→</span></a>
+        <a class="route-a osa" href="https://maps.google.com/?q=Umeda+Sky+Building+Osaka" target="_blank" rel="noopener">📍 Umeda Sky Building <span class="arr">→</span></a>
+      </div>
+    </div>
+
+    <!-- Food -->
+    <div class="card bordered-osa fi">
+      <div class="card-lbl osa" data-i18n="lbl_food">FOOD</div>
+      <ul class="food-list">
+        <li class="food-item"><div class="f-icon osa">🐙</div><div><div class="f-name">Dotonbori</div><div class="f-desc" data-i18n="of1">Takoyaki, okonomiyaki, kushikatsu</div></div></li>
+        <li class="food-item"><div class="f-icon osa">🦞</div><div><div class="f-name">Kuromon Market</div><div class="f-desc" data-i18n="of2">Seafood and snacks</div></div></li>
+        <li class="food-item"><div class="f-icon osa">🍢</div><div><div class="f-name">Shinsekai</div><div class="f-desc" data-i18n="of3">Kushikatsu and retro food</div></div></li>
+        <li class="food-item"><div class="f-icon osa">🍶</div><div><div class="f-name">Tenma</div><div class="f-desc" data-i18n="of4">Local izakaya area</div></div></li>
+        <li class="food-item"><div class="f-icon osa">🍱</div><div><div class="f-name">Umeda / Namba</div><div class="f-desc" data-i18n="of5">Ramen, sushi, shopping</div></div></li>
+      </ul>
+    </div>
+
+    <!-- Sightseeing -->
+    <div class="card bordered-osa fi">
+      <div class="card-lbl osa" data-i18n="lbl_sight">SIGHTSEEING</div>
+      <ul class="sight-list">
+        <li class="sight-item">
+          <div class="f-icon osa">🏯</div>
+          <div><div class="f-name">Osaka Castle</div><div class="f-desc" data-i18n="os1">History and photos (castle tower fee)</div>
+            <div class="s-meta"><span class="fee paid">~¥600</span><a class="map-a osa" href="https://maps.google.com/?q=Osaka+Castle" target="_blank" rel="noopener">🗺 Maps</a></div></div>
+        </li>
+        <li class="sight-item">
+          <div class="f-icon osa">🌟</div>
+          <div><div class="f-name">Dotonbori</div><div class="f-desc" data-i18n="os2">Neon lights, Glico sign, street food</div>
+            <div class="s-meta"><span class="fee free">Free</span><a class="map-a osa" href="https://maps.google.com/?q=Dotonbori+Osaka" target="_blank" rel="noopener">🗺 Maps</a></div></div>
+        </li>
+        <li class="sight-item">
+          <div class="f-icon osa">🎪</div>
+          <div><div class="f-name">Shinsekai / Tsutenkaku</div><div class="f-desc" data-i18n="os3">Retro Osaka (tower entry optional)</div>
+            <div class="s-meta"><span class="fee free">Free area</span><a class="map-a osa" href="https://maps.google.com/?q=Shinsekai+Osaka" target="_blank" rel="noopener">🗺 Maps</a></div></div>
+        </li>
+        <li class="sight-item">
+          <div class="f-icon osa">🏙️</div>
+          <div><div class="f-name">Umeda Sky Building</div><div class="f-desc" data-i18n="os4">City view from floating garden</div>
+            <div class="s-meta"><span class="fee paid">~¥1,500</span><a class="map-a osa" href="https://maps.google.com/?q=Umeda+Sky+Building+Osaka" target="_blank" rel="noopener">🗺 Maps</a></div></div>
+        </li>
+        <li class="sight-item">
+          <div class="f-icon osa">🎢</div>
+          <div><div class="f-name">Universal Studios Japan</div><div class="f-desc" data-i18n="os5">Entertainment — full day</div>
+            <div class="s-meta"><span class="fee book">Book ahead</span><a class="map-a osa" href="https://maps.google.com/?q=Universal+Studios+Japan+Osaka" target="_blank" rel="noopener">🗺 Maps</a></div></div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+
+  <!-- ═══════ PRACTICAL TIPS ═══════ -->
+  <div class="card fi" style="margin-bottom:24px;">
+    <div class="card-lbl gray" data-i18n="lbl_tips">PRACTICAL TIPS</div>
+    <div class="tip-row">
+      <div class="tip-ico">💳</div>
+      <div><div class="tip-ttl" data-i18n="t1h">IC Card (Suica / ICOCA)</div><div class="tip-bdy" data-i18n="t1b">Get an IC Card at any major station. Works on trains, buses, and convenience stores across all 3 cities.</div></div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-ico">💴</div>
+      <div><div class="tip-ttl" data-i18n="t2h">Cash is King</div><div class="tip-bdy" data-i18n="t2b">Many local restaurants and small shops don't accept cards. Use 7-Eleven or Japan Post ATMs — they accept foreign cards.</div></div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-ico">👟</div>
+      <div><div class="tip-ttl" data-i18n="t3h">Wear Easy Shoes</div><div class="tip-bdy" data-i18n="t3b">You'll remove shoes at many traditional restaurants and shrines. Slip-ons save you a lot of time.</div></div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-ico">📱</div>
+      <div><div class="tip-ttl" data-i18n="t4h">Google Translate</div><div class="tip-bdy" data-i18n="t4b">Download with Japanese offline. The camera mode reads menus in real time — incredibly useful.</div></div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-ico">🏪</div>
+      <div><div class="tip-ttl" data-i18n="t5h">Convenience Stores</div><div class="tip-bdy" data-i18n="t5b">7-Eleven, Lawson, FamilyMart sell great food: onigiri, hot meals, desserts. Perfect for breakfast or a quick snack.</div></div>
+    </div>
+  </div>
+
+
+  <!-- ═══════ BEFORE YOU GO ═══════ -->
+  <div class="before-box fi">
+    <h2 data-i18n="bfr_title">Before You Go</h2>
+    <p class="sub">⚠️ Important note</p>
+    <div class="warn-box" data-i18n="bfr_body">Opening hours, holidays, prices, and crowds can change. Always check <strong>Google Maps</strong> or the official website before you go. <strong>teamLab Planets</strong> and popular spots require advance booking.</div>
+  </div>
+
+
+  <!-- ═══════ FOOTER / QR ═══════ -->
+  <div class="footer-box fi">
+    <h3 data-i18n="qr_title">Share this guide</h3>
+    <p data-i18n="qr_sub">Scan the QR code to open on your phone</p>
+    <div id="qrcode"></div>
+    <div class="site-url" id="site-url">kazuya0728wa-rgb.github.io/japan-guide/</div>
+    <div class="credits">
+      This guide is for informational purposes only.<br>
+      Always verify info before visiting · Free to share
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// ══════════════════════════════════════
+//  TRANSLATIONS
+// ══════════════════════════════════════
+const T = {
+  en: {
+    how_title:"HOW TO USE THIS GUIDE",
+    how_body:"Pick one city, choose 2–3 sightseeing spots, and add 1–2 food areas. Keep enough time for breaks and transfers.",
+    lbl_route:"ROUTE", lbl_food:"FOOD", lbl_sight:"SIGHTSEEING", lbl_tips:"PRACTICAL TIPS",
+    tok_ovr:"Modern city, temples, shopping, seafood, nightlife.",
+    kyo_ovr:"Temples, shrines, traditional streets, matcha, nature.",
+    osa_ovr:"Street food, nightlife, casual local atmosphere.",
+    tok_route:"Morning: Tsukiji → Afternoon: Asakusa & Sensoji → Evening: Shibuya or Shinjuku. Add 10–15 min for big station transfers.",
+    kyo_route:"Morning: Fushimi Inari → Afternoon: Kiyomizu-dera & Ninenzaka → Evening: Gion or Pontocho.",
+    osa_route:"Morning: Osaka Castle → Afternoon: Kuromon Market & Namba → Evening: Dotonbori & Shinsekai.",
+    tf1:"Seafood, sushi, seafood bowls, tamagoyaki",tf2:"Traditional snacks, ningyo-yaki, senbei, matcha sweets",tf3:"Ramen, yakitori, izakaya",tf4:"Cafes, crepes, casual food",tf5:"Sushi, tempura, desserts",
+    kf1:"Kyoto snacks, yuba, matcha sweets",kf2:"Traditional restaurants, wagashi, matcha",kf3:"Dinner atmosphere, izakaya",kf4:"Soba, tofu, sweets",kf5:"Ramen, bento, casual dinner",
+    of1:"Takoyaki, okonomiyaki, kushikatsu",of2:"Seafood and snacks",of3:"Kushikatsu and retro food",of4:"Local izakaya area",of5:"Ramen, sushi, shopping",
+    ts1:"Traditional Tokyo, Kaminarimon gate",ts2:"Peaceful forest shrine",ts3:"Classic Tokyo photo spot",ts4:"City view from the tallest tower",ts5:"Digital art & waterfront",
+    ks1:"Famous red torii gates — open 24/7",ks2:"Temple, old streets, city view",ks3:"Historic streets and evening walk",ks4:"Nature and photos — open 24/7",ks5:"Golden Pavilion and garden",
+    os1:"History and photos (castle tower fee)",os2:"Neon lights, Glico sign, street food",os3:"Retro Osaka (tower entry optional)",os4:"City view from floating garden",os5:"Entertainment — full day",
+    t1h:"IC Card (Suica / ICOCA)",t1b:"Get an IC Card at any major station. Works on trains, buses, and convenience stores across all 3 cities.",
+    t2h:"Cash is King",t2b:"Many local restaurants and small shops don't accept cards. Use 7-Eleven or Japan Post ATMs — they accept foreign cards.",
+    t3h:"Wear Easy Shoes",t3b:"You'll remove shoes at many traditional restaurants and shrines. Slip-ons save you a lot of time.",
+    t4h:"Google Translate",t4b:"Download with Japanese offline. The camera mode reads menus in real time — incredibly useful.",
+    t5h:"Convenience Stores",t5b:"7-Eleven, Lawson, FamilyMart sell great food: onigiri, hot meals, desserts. Perfect for breakfast or a quick snack.",
+    bfr_title:"Before You Go",bfr_body:"Opening hours, holidays, prices, and crowds can change. Always check <strong>Google Maps</strong> or the official website before you go. <strong>teamLab Planets</strong> and popular spots require advance booking.",
+    qr_title:"Share this guide",qr_sub:"Scan the QR code to open on your phone",
+  },
+  fr: {
+    how_title:"COMMENT UTILISER CE GUIDE",
+    how_body:"Choisissez une ville, sélectionnez 2–3 sites touristiques et ajoutez 1–2 zones gastronomiques. Prévoyez du temps pour les pauses et les transferts.",
+    lbl_route:"ITINÉRAIRE", lbl_food:"GASTRONOMIE", lbl_sight:"SITES TOURISTIQUES", lbl_tips:"CONSEILS PRATIQUES",
+    tok_ovr:"Ville moderne, temples, shopping, fruits de mer, vie nocturne.",
+    kyo_ovr:"Temples, sanctuaires, rues traditionnelles, matcha, nature.",
+    osa_ovr:"Street food, vie nocturne, atmosphère locale décontractée.",
+    tok_route:"Matin : Tsukiji → Après-midi : Asakusa & Sensoji → Soir : Shibuya ou Shinjuku. Prévoir 10–15 min pour les grandes gares.",
+    kyo_route:"Matin : Fushimi Inari → Après-midi : Kiyomizu-dera & Ninenzaka → Soir : Gion ou Pontocho.",
+    osa_route:"Matin : Osaka Castle → Après-midi : Kuromon Market & Namba → Soir : Dotonbori & Shinsekai.",
+    tf1:"Fruits de mer, sushi, bols de poisson, tamagoyaki",tf2:"Snacks traditionnels, ningyo-yaki, senbei, douceurs au matcha",tf3:"Ramen, yakitori, izakaya",tf4:"Cafés, crêpes, restauration décontractée",tf5:"Sushi, tempura, desserts",
+    kf1:"Spécialités de Kyoto, yuba, douceurs au matcha",kf2:"Restaurants traditionnels, wagashi, matcha",kf3:"Ambiance dîner, izakaya",kf4:"Soba, tofu, douceurs",kf5:"Ramen, bento, dîner décontracté",
+    of1:"Takoyaki, okonomiyaki, kushikatsu",of2:"Fruits de mer et snacks",of3:"Kushikatsu et cuisine rétro",of4:"Quartier izakaya local",of5:"Ramen, sushi, shopping",
+    ts1:"Tokyo traditionnel, porte Kaminarimon",ts2:"Sanctuaire forestier paisible",ts3:"Photo emblématique de Tokyo",ts4:"Vue sur la ville depuis la tour la plus haute",ts5:"Art numérique — réservation obligatoire",
+    ks1:"Célèbres torii rouges — ouvert 24h/24",ks2:"Temple, vieilles rues, vue sur la ville",ks3:"Rues historiques et promenade du soir",ks4:"Nature et photos — ouvert 24h/24",ks5:"Pavillon d'Or et jardin",
+    os1:"Histoire et photos (accès à la tour payant)",os2:"Lumières néon, panneau Glico, street food",os3:"Osaka rétro (entrée de la tour en option)",os4:"Vue sur la ville depuis le jardin suspendu",os5:"Divertissement — journée complète",
+    t1h:"Carte IC (Suica / ICOCA)",t1b:"Achetez une carte IC dans n'importe quelle grande gare. Valable dans les trains, bus et supérettes dans les 3 villes.",
+    t2h:"Le cash reste roi",t2b:"Beaucoup de restaurants et petits commerces n'acceptent pas les cartes. Retirez des yens aux distributeurs 7-Eleven ou Japan Post.",
+    t3h:"Chaussures faciles à enlever",t3b:"Vous devrez enlever vos chaussures dans de nombreux restaurants traditionnels et sanctuaires. Optez pour des chaussures sans lacets.",
+    t4h:"Google Traduction",t4b:"Téléchargez le japonais hors ligne. La caméra peut lire les menus japonais en temps réel — très pratique.",
+    t5h:"Convenience stores (コンビニ)",t5b:"7-Eleven, Lawson, FamilyMart vendent d'excellents repas : onigiri, plats chauds, desserts. Parfait pour le petit-déjeuner.",
+    bfr_title:"Avant de partir",bfr_body:"Les horaires, prix et affluence peuvent changer. Vérifiez toujours <strong>Google Maps</strong> ou le site officiel. <strong>teamLab Planets</strong> et les sites populaires nécessitent une réservation à l'avance.",
+    qr_title:"Partagez ce guide",qr_sub:"Scannez le QR code pour l'ouvrir sur votre téléphone",
+  },
+  de: {
+    how_title:"SO NUTZEN SIE DIESEN GUIDE",
+    how_body:"Wählen Sie eine Stadt, 2–3 Sehenswürdigkeiten und 1–2 Essensgebiete. Planen Sie genügend Zeit für Pausen und Transfers ein.",
+    lbl_route:"REISEROUTE", lbl_food:"KULINARIK", lbl_sight:"SEHENSWÜRDIGKEITEN", lbl_tips:"PRAKTISCHE TIPPS",
+    tok_ovr:"Moderne Stadt, Tempel, Shopping, Meeresfrüchte, Nachtleben.",
+    kyo_ovr:"Tempel, Schreine, traditionelle Gassen, Matcha, Natur.",
+    osa_ovr:"Streetfood, Nachtleben, entspannte lokale Atmosphäre.",
+    tok_route:"Morgen: Tsukiji → Nachmittag: Asakusa & Sensoji → Abend: Shibuya oder Shinjuku. 10–15 Min. für große Bahnhofswechsel einplanen.",
+    kyo_route:"Morgen: Fushimi Inari → Nachmittag: Kiyomizu-dera & Ninenzaka → Abend: Gion oder Pontocho.",
+    osa_route:"Morgen: Osaka Castle → Nachmittag: Kuromon Market & Namba → Abend: Dotonbori & Shinsekai.",
+    tf1:"Meeresfrüchte, Sushi, Fischschalen, Tamagoyaki",tf2:"Traditionelle Snacks, Ningyo-yaki, Senbei, Matcha-Süßigkeiten",tf3:"Ramen, Yakitori, Izakaya",tf4:"Cafés, Crêpes, lockere Küche",tf5:"Sushi, Tempura, Desserts",
+    kf1:"Kyoto-Spezialitäten, Yuba, Matcha-Süßigkeiten",kf2:"Traditionelle Restaurants, Wagashi, Matcha",kf3:"Abendstimmung, Izakaya",kf4:"Soba, Tofu, Süßigkeiten",kf5:"Ramen, Bento, lockeres Abendessen",
+    of1:"Takoyaki, Okonomiyaki, Kushikatsu",of2:"Meeresfrüchte und Snacks",of3:"Kushikatsu und Retro-Küche",of4:"Lokales Izakaya-Viertel",of5:"Ramen, Sushi, Shopping",
+    ts1:"Traditionelles Tokyo, Kaminarimon-Tor",ts2:"Ruhiges Waldheiligtum",ts3:"Klassischer Tokyo-Fotospot",ts4:"Stadtblick vom höchsten Turm",ts5:"Digitale Kunst — Voranmeldung erforderlich",
+    ks1:"Berühmte rote Torii-Tore — 24/7 geöffnet",ks2:"Tempel, alte Gassen, Stadtblick",ks3:"Historische Gassen und Abendspaziergang",ks4:"Natur und Fotos — 24/7 geöffnet",ks5:"Goldener Pavillon und Garten",
+    os1:"Geschichte und Fotos (Turmeingang kostenpflichtig)",os2:"Neonlichter, Glico-Schild, Streetfood",os3:"Retro-Osaka (Turmeingang optional)",os4:"Stadtblick vom Schwebegarten",os5:"Freizeitpark — ganzer Tag",
+    t1h:"IC-Karte (Suica / ICOCA)",t1b:"An jedem großen Bahnhof erhältlich. Gilt für Züge, Busse und Convenience Stores in allen 3 Städten.",
+    t2h:"Bargeld ist König",t2b:"Viele Restaurants und kleine Geschäfte akzeptieren keine Karten. Heben Sie Yen am 7-Eleven oder Japan Post Automaten ab.",
+    t3h:"Leicht auszuziehende Schuhe",t3b:"In vielen traditionellen Restaurants und Schreinen müssen Sie die Schuhe ausziehen. Slipper sparen viel Zeit.",
+    t4h:"Google Übersetzer",t4b:"Japanisch für Offline herunterladen. Die Kamerafunktion liest japanische Menüs in Echtzeit.",
+    t5h:"Convenience Stores",t5b:"7-Eleven, Lawson, FamilyMart bieten ausgezeichnetes Essen: Onigiri, warme Mahlzeiten, Desserts. Ideal für das Frühstück.",
+    bfr_title:"Vor der Reise",bfr_body:"Öffnungszeiten, Preise und Besucherzahlen können sich ändern. Prüfen Sie immer <strong>Google Maps</strong> oder die offizielle Website. <strong>teamLab Planets</strong> und beliebte Orte erfordern eine Voranmeldung.",
+    qr_title:"Guide teilen",qr_sub:"QR-Code scannen, um auf dem Handy zu öffnen",
+  },
+  es: {
+    how_title:"CÓMO USAR ESTA GUÍA",
+    how_body:"Elige una ciudad, selecciona 2–3 atracciones y añade 1–2 zonas gastronómicas. Deja tiempo suficiente para descansos y traslados.",
+    lbl_route:"RUTA", lbl_food:"GASTRONOMÍA", lbl_sight:"ATRACCIONES", lbl_tips:"CONSEJOS PRÁCTICOS",
+    tok_ovr:"Ciudad moderna, templos, compras, mariscos, vida nocturna.",
+    kyo_ovr:"Templos, santuarios, calles tradicionales, matcha, naturaleza.",
+    osa_ovr:"Comida callejera, vida nocturna, ambiente local relajado.",
+    tok_route:"Mañana: Tsukiji → Tarde: Asakusa & Sensoji → Noche: Shibuya o Shinjuku. +10–15 min en estaciones grandes.",
+    kyo_route:"Mañana: Fushimi Inari → Tarde: Kiyomizu-dera & Ninenzaka → Noche: Gion o Pontocho.",
+    osa_route:"Mañana: Osaka Castle → Tarde: Kuromon Market & Namba → Noche: Dotonbori & Shinsekai.",
+    tf1:"Mariscos, sushi, cuencos de pescado, tamagoyaki",tf2:"Snacks tradicionales, ningyo-yaki, senbei, dulces de matcha",tf3:"Ramen, yakitori, izakaya",tf4:"Cafés, crêpes, comida casual",tf5:"Sushi, tempura, postres",
+    kf1:"Especialidades de Kioto, yuba, dulces de matcha",kf2:"Restaurantes tradicionales, wagashi, matcha",kf3:"Ambiente de cena, izakaya",kf4:"Soba, tofu, dulces",kf5:"Ramen, bento, cena casual",
+    of1:"Takoyaki, okonomiyaki, kushikatsu",of2:"Mariscos y snacks",of3:"Kushikatsu y comida retro",of4:"Zona de izakayas locales",of5:"Ramen, sushi, shopping",
+    ts1:"Tokio tradicional, puerta Kaminarimon",ts2:"Tranquilo santuario en el bosque",ts3:"El cruce fotográfico de Tokio",ts4:"Vista de la ciudad desde la torre más alta",ts5:"Arte digital — reserva anticipada obligatoria",
+    ks1:"Famosos torii rojos — abierto 24h",ks2:"Templo, calles antiguas, vistas de la ciudad",ks3:"Calles históricas y paseo nocturno",ks4:"Naturaleza y fotos — abierto 24h",ks5:"Pabellón Dorado y jardín",
+    os1:"Historia y fotos (torre de pago)",os2:"Luces de neón, letrero Glico, comida callejera",os3:"Osaka retro (torre opcional)",os4:"Vista de la ciudad desde el jardín flotante",os5:"Entretenimiento — día completo",
+    t1h:"Tarjeta IC (Suica / ICOCA)",t1b:"Cómprala en cualquier estación principal. Válida en trenes, autobuses y tiendas de conveniencia en las 3 ciudades.",
+    t2h:"El efectivo es esencial",t2b:"Muchos restaurantes y tiendas no aceptan tarjetas. Usa cajeros de 7-Eleven o Japan Post — aceptan tarjetas extranjeras.",
+    t3h:"Calzado fácil de poner",t3b:"Tendrás que quitarte los zapatos en muchos restaurantes tradicionales y santuarios. Los mocasines ahorran tiempo.",
+    t4h:"Google Translate",t4b:"Descarga el japonés sin conexión. La cámara lee menús japoneses en tiempo real — muy útil.",
+    t5h:"Tiendas de conveniencia",t5b:"7-Eleven, Lawson, FamilyMart venden comida excelente: onigiri, platos calientes, postres. Perfecto para el desayuno.",
+    bfr_title:"Antes de ir",bfr_body:"Los horarios, precios y afluencia pueden cambiar. Consulta siempre <strong>Google Maps</strong> o la web oficial. <strong>teamLab Planets</strong> y los lugares populares requieren reserva anticipada.",
+    qr_title:"Comparte esta guía",qr_sub:"Escanea el código QR para abrirlo en tu móvil",
+  },
+  it: {
+    how_title:"COME USARE QUESTA GUIDA",
+    how_body:"Scegli una città, seleziona 2–3 attrazioni e aggiungi 1–2 zone gastronomiche. Lascia abbastanza tempo per le pause e i trasferimenti.",
+    lbl_route:"PERCORSO", lbl_food:"GASTRONOMIA", lbl_sight:"ATTRAZIONI", lbl_tips:"CONSIGLI PRATICI",
+    tok_ovr:"Città moderna, templi, shopping, frutti di mare, vita notturna.",
+    kyo_ovr:"Templi, santuari, strade tradizionali, matcha, natura.",
+    osa_ovr:"Cibo di strada, vita notturna, atmosfera locale rilassata.",
+    tok_route:"Mattina: Tsukiji → Pomeriggio: Asakusa & Sensoji → Sera: Shibuya o Shinjuku. +10–15 min per le grandi stazioni.",
+    kyo_route:"Mattina: Fushimi Inari → Pomeriggio: Kiyomizu-dera & Ninenzaka → Sera: Gion o Pontocho.",
+    osa_route:"Mattina: Osaka Castle → Pomeriggio: Kuromon Market & Namba → Sera: Dotonbori & Shinsekai.",
+    tf1:"Frutti di mare, sushi, ciotole di pesce, tamagoyaki",tf2:"Snack tradizionali, ningyo-yaki, senbei, dolci al matcha",tf3:"Ramen, yakitori, izakaya",tf4:"Caffetterie, crêpes, cibo casual",tf5:"Sushi, tempura, dessert",
+    kf1:"Specialità di Kyoto, yuba, dolci al matcha",kf2:"Ristoranti tradizionali, wagashi, matcha",kf3:"Atmosfera serale, izakaya",kf4:"Soba, tofu, dolci",kf5:"Ramen, bento, cena casual",
+    of1:"Takoyaki, okonomiyaki, kushikatsu",of2:"Frutti di mare e snack",of3:"Kushikatsu e cibo retrò",of4:"Quartiere izakaya locale",of5:"Ramen, sushi, shopping",
+    ts1:"Tokyo tradizionale, porta Kaminarimon",ts2:"Tranquillo santuario nella foresta",ts3:"L'incrocio più fotografato di Tokyo",ts4:"Vista della città dalla torre più alta",ts5:"Arte digitale — prenotazione obbligatoria",
+    ks1:"Famosi torii rossi — aperto 24h",ks2:"Tempio, vie antiche, vista sulla città",ks3:"Strade storiche e passeggiata serale",ks4:"Natura e foto — aperto 24h",ks5:"Padiglione Dorato e giardino",
+    os1:"Storia e foto (torre a pagamento)",os2:"Luci al neon, insegna Glico, cibo di strada",os3:"Osaka retrò (torre opzionale)",os4:"Vista della città dal giardino sospeso",os5:"Parco divertimenti — giornata intera",
+    t1h:"IC Card (Suica / ICOCA)",t1b:"Acquistala in qualsiasi grande stazione. Valida su treni, autobus e negozi di convenienza in tutte e 3 le città.",
+    t2h:"Il contante è fondamentale",t2b:"Molti ristoranti e negozi non accettano carte. Usa i bancomat di 7-Eleven o Japan Post — accettano carte straniere.",
+    t3h:"Scarpe facili da togliere",t3b:"Dovrai toglierti le scarpe in molti ristoranti tradizionali e santuari. I mocassini fanno risparmiare tempo.",
+    t4h:"Google Translate",t4b:"Scarica il giapponese offline. La fotocamera legge i menu giapponesi in tempo reale — utilissimo.",
+    t5h:"Convenience Store (コンビニ)",t5b:"7-Eleven, Lawson, FamilyMart vendono ottimo cibo: onigiri, pasti caldi, dessert. Perfetti per la colazione.",
+    bfr_title:"Prima di partire",bfr_body:"Orari, prezzi e affollamento possono variare. Controlla sempre <strong>Google Maps</strong> o il sito ufficiale. <strong>teamLab Planets</strong> e i luoghi famosi richiedono prenotazione anticipata.",
+    qr_title:"Condividi questa guida",qr_sub:"Scansiona il QR code per aprirla sul telefono",
+  }
+};
+
+// ══════════════════════════════════════
+//  LANGUAGE SWITCHER
+// ══════════════════════════════════════
+let lang = localStorage.getItem('jg_lang') || 'en';
+
+function setLang(l) {
+  lang = l;
+  localStorage.setItem('jg_lang', l);
+  document.documentElement.lang = l;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === l));
+  const dict = T[l] || T.en;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.dataset.i18n;
+    if (dict[k] !== undefined) el.innerHTML = dict[k];
+  });
+}
+
+// ══════════════════════════════════════
+//  QR CODE
+// ══════════════════════════════════════
+function initQR() {
+  const isLocal = location.hostname === '' || location.hostname === 'localhost' || location.protocol === 'file:';
+  const url = isLocal ? 'https://kazuya0728wa-rgb.github.io/japan-guide/' : location.href.split('?')[0];
+  document.getElementById('site-url').textContent = url;
+  try {
+    new QRCode(document.getElementById('qrcode'), {
+      text: url, width: 140, height: 140,
+      colorDark: '#111827', colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  } catch(e) { document.getElementById('qrcode').innerHTML = '<p style="font-size:12px;color:#6B7280">'+url+'</p>'; }
+}
+
+// ══════════════════════════════════════
+//  SCROLL FADE-IN
+// ══════════════════════════════════════
+function initAnim() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); });
+  }, { threshold: 0.06, rootMargin: '0px 0px -20px 0px' });
+  document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+}
+
+// ══════════════════════════════════════
+//  BOOT
+// ══════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  setLang(lang);
+  initQR();
+  initAnim();
+});
+</script>
+</body>
+</html>
